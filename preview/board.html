@@ -1,0 +1,277 @@
+<!doctype html>
+<!--
+  정적 미리보기 빌드. "문의하기" 버튼이 실제 카페24에서 열리는 게시판
+  (상품 Q&A) 화면과 비슷하게 보이도록 만든 목업입니다. 실제 글쓰기/검색/
+  DB 연동은 동작하지 않으며, 카페24에 올라간 뒤에는 진짜 게시판 모듈이
+  이 화면을 대체합니다.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상품 Q&A | OAT MAUVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="otmove-main.css">
+<style>
+  /* 서브페이지(히어로 없음) 보정 — README-적용방법.md의 sub 레이아웃 규칙과 동일 */
+  body#sub .util-bar{color:var(--taupe);}
+
+  .board-breadcrumb{
+    padding:14px 32px 0;
+    font-size:12px;color:var(--taupe);
+    display:flex;justify-content:flex-end;gap:6px;
+  }
+  .board-breadcrumb a{color:var(--taupe);}
+  .board-breadcrumb a:hover{color:var(--mauve);}
+  .board-breadcrumb .current{color:var(--ink);}
+
+  .board-main{padding:18px 32px 90px;}
+  .board-title{font-size:26px;font-weight:700;letter-spacing:.02em;color:var(--ink);margin:0 0 26px;}
+
+  .board-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;}
+  .board-tab{
+    display:inline-block;padding:10px 22px;border-radius:999px;
+    border:1px solid var(--line);background:var(--white);
+    font-size:13px;color:var(--taupe);
+  }
+  .board-tab:hover{border-color:var(--rose);color:var(--mauve);}
+  .board-tab.active{background:var(--ink);border-color:var(--ink);color:var(--ivory);}
+
+  .board-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .board-table thead th{
+    border-top:2px solid var(--ink);border-bottom:1px solid var(--line);
+    background:var(--ivory-deep);
+    padding:13px 10px;font-weight:500;color:var(--ink);text-align:center;
+  }
+  .board-table thead th.col-title{text-align:left;padding-left:24px;}
+  .board-table tbody td{
+    border-bottom:1px solid var(--line);
+    padding:34px 10px;text-align:center;color:var(--taupe);
+  }
+
+  .board-controls{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+    margin-top:20px;
+  }
+  .board-search{display:flex;gap:8px;flex-wrap:wrap;}
+  .board-search select,.board-search input[type=text]{
+    border:1px solid var(--line);border-radius:2px;background:var(--white);
+    font:inherit;font-size:12.5px;color:var(--ink);padding:9px 10px;
+  }
+  .board-search input[type=text]{width:180px;}
+  .board-search button{
+    border:1px solid var(--ink);border-radius:2px;background:var(--white);
+    padding:9px 16px;font-size:12.5px;color:var(--ink);
+  }
+  .board-search button:hover{background:var(--ivory-deep);}
+  .board-write{
+    display:inline-block;background:var(--ink);color:var(--ivory);
+    padding:11px 26px;border-radius:2px;font-size:13px;font-weight:600;
+  }
+  .board-write:hover{background:var(--mauve-deep);}
+
+  .board-move-row{
+    display:flex;align-items:center;flex-wrap:wrap;gap:10px;
+    margin-top:26px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--taupe);
+  }
+  .board-move-row select{
+    border:1px solid var(--line);border-radius:2px;background:var(--white);
+    font:inherit;font-size:12.5px;color:var(--ink);padding:8px 10px;
+  }
+  .board-move-row button{
+    border:1px solid var(--line);border-radius:2px;background:var(--white);
+    padding:8px 14px;font-size:12.5px;color:var(--ink);
+  }
+  .board-move-row button:hover{border-color:var(--rose);color:var(--mauve);}
+  .board-move-note{color:var(--rose);}
+
+  @media (max-width:640px){
+    .board-main{padding:16px 20px 70px;}
+    .board-breadcrumb{padding:12px 20px 0;}
+    .board-controls{align-items:flex-start;}
+    .board-write{align-self:flex-end;}
+  }
+</style>
+</head>
+<body id="sub">
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+    </div>
+  </div>
+
+  <!-- ===== TOP UTILITY BAR ===== -->
+  <div class="util-bar">
+    <div class="wrap">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER (서브페이지: 히어로가 없어 header-scrolled 고정) ===== -->
+  <header class="site-header header-scrolled">
+    <div class="header-wrap wrap" style="position:relative;">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand-row">
+        <a class="logo" href="index.html"><img src="logo.png" alt="OAT MAUVE"></a>
+      </div>
+      <div class="header-icons">
+        <a href="#none" aria-label="마이페이지">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </a>
+        <a href="#none" aria-label="장바구니">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a href="#none" aria-label="검색">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SIDE DRAWER MENU ===== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <a class="drawer-logo" href="index.html"><img src="logo.png" alt="OAT MAUVE" style="height:24px;width:auto;"></a>
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="메뉴 닫기">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="index.html">쇼핑 계속하기</a></li>
+      <li><a href="board.html">게시판</a></li>
+    </ul>
+    <div class="drawer-utility">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </aside>
+
+  <!-- ===== BREADCRUMB ===== -->
+  <div class="board-breadcrumb">
+    <a href="index.html">홈</a> / <a href="#none">게시판</a> / <span class="current">상품 Q&amp;A</span>
+  </div>
+
+  <!-- ===== BOARD ===== -->
+  <main class="board-main">
+    <h1 class="board-title">상품 Q&amp;A</h1>
+
+    <nav class="board-tabs">
+      <a href="#none" class="board-tab">공지사항</a>
+      <a href="#none" class="board-tab">상품 사용후기</a>
+      <a href="#none" class="board-tab active">상품 Q&amp;A</a>
+      <a href="#none" class="board-tab">이용안내 FAQ</a>
+      <a href="#none" class="board-tab">교환/반품 문의</a>
+    </nav>
+
+    <table class="board-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" aria-label="전체 선택"></th>
+          <th class="col-no">번호</th>
+          <th class="col-product">상품정보</th>
+          <th class="col-title">제목</th>
+          <th class="col-writer">작성자</th>
+          <th class="col-date">작성일</th>
+          <th class="col-views">조회</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7">검색결과가 없습니다.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="board-controls">
+      <div class="board-search">
+        <select aria-label="검색 기간">
+          <option>일주일</option>
+          <option>1개월</option>
+          <option>3개월</option>
+          <option>전체</option>
+        </select>
+        <select aria-label="검색 항목">
+          <option>제목</option>
+          <option>내용</option>
+          <option>작성자</option>
+        </select>
+        <input type="text" placeholder="검색어를 입력하세요">
+        <button type="button">찾기</button>
+      </div>
+      <a href="#none" class="board-write">글쓰기</a>
+    </div>
+
+    <div class="board-move-row">
+      <span>해당 글 이동</span>
+      <select aria-label="이동할 게시판">
+        <option>공지사항</option>
+        <option>상품 사용후기</option>
+        <option>상품 Q&amp;A</option>
+        <option>이용안내 FAQ</option>
+        <option>교환/반품 문의</option>
+      </select>
+      <span>으로</span>
+      <button type="button">글 이동</button>
+      <button type="button">글 복사</button>
+      <span class="board-move-note">! 댓글포함, 답변불포함</span>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Customer</h4>
+          <a href="#none">공지사항</a>
+          <a href="#none">교환/반품</a>
+          <a href="#none">이용약관</a>
+          <a href="#none">개인정보처리방침</a>
+          <a href="naver-pay.html">네이버페이 결제안내</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#none">브랜드 스토리</a>
+          <a href="#none">멤버십</a>
+          <a href="#none">인스타그램</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="biz-info">
+          오트모브 (oatmauve) &nbsp;|&nbsp; 대표자 : 문해나 &nbsp;|&nbsp; 사업자등록번호 : 394-13-03009<br>
+          통신판매업신고 : 제 2026-인천연수구-1644 호 &nbsp;|&nbsp; 주소 : 인천광역시 연수구 컨벤시아대로 90, 501동 905호 (송도동, 인천힐스테이트) &nbsp;|&nbsp; 대표전화 : 010-4949-9712<br>
+          © OAT MAUVE. All rights reserved. &nbsp;|&nbsp; Hosting by Cafe24
+        </div>
+        <div class="sns-row">
+          <a href="https://www.instagram.com/oat_mauve/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+          <a href="#none" aria-label="Kakao">K</a>
+          <a href="#none" aria-label="Blog">B</a>
+          <a href="#none" aria-label="Youtube">Y</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script src="otmove-main.js"></script>
+</body>
+</html>
