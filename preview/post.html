@@ -243,7 +243,13 @@
     });
     document.getElementById('deleteConfirm').addEventListener('click', function(){
       var pw = document.getElementById('deletePw').value;
-      if(!pw){ return; }
+      var note = document.getElementById('deleteNote');
+      if(!pw){
+        note.textContent = '비밀번호를 입력해 주세요.';
+        note.classList.add('show');
+        return;
+      }
+      note.classList.remove('show');
       fetch('/api/posts/' + encodeURIComponent(id), {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -252,10 +258,15 @@
         .then(function(r){ return r.json().then(function(data){ return { ok: r.ok, data: data }; }); })
         .then(function(res){
           if(!res.ok){
-            document.getElementById('deleteNote').classList.add('show');
+            note.textContent = res.data.error || '비밀번호가 일치하지 않습니다.';
+            note.classList.add('show');
             return;
           }
           location.href = 'board.html';
+        })
+        .catch(function(){
+          note.textContent = '네트워크 오류로 삭제하지 못했습니다.';
+          note.classList.add('show');
         });
     });
   }
@@ -281,7 +292,12 @@
     });
     document.getElementById('editConfirm').addEventListener('click', function(){
       var pw = document.getElementById('editPw').value;
-      if(!pw) return;
+      var note = document.getElementById('editNote');
+      if(!pw){
+        note.textContent = '비밀번호를 입력해 주세요.';
+        note.classList.add('show');
+        return;
+      }
       renderEditForm(pw);
     });
   }
@@ -291,9 +307,9 @@
       '<div class="post-category">' + escapeHtml(currentPost.category) + '</div>'
       + '<h1 class="post-title">글 수정</h1>'
       + '<div class="form-error" id="editError" style="display:none;color:#b5334a;font-size:13px;margin-bottom:14px;"></div>'
-      + '<form class="edit-form" id="editForm">'
-      +   '<div class="form-row"><label>제목</label><input type="text" id="eTitle" maxlength="200" value="' + escapeHtml(currentPost.title) + '" required></div>'
-      +   '<div class="form-row"><label>내용</label><textarea id="eContent" maxlength="5000" required>' + escapeHtml(currentPost.content) + '</textarea></div>'
+      + '<form class="edit-form" id="editForm" novalidate>'
+      +   '<div class="form-row"><label>제목</label><input type="text" id="eTitle" maxlength="200" value="' + escapeHtml(currentPost.title) + '"></div>'
+      +   '<div class="form-row"><label>내용</label><textarea id="eContent" maxlength="5000">' + escapeHtml(currentPost.content) + '</textarea></div>'
       +   '<div class="post-actions">'
       +     '<button type="button" id="editCancelSave">취소</button>'
       +     '<button type="submit" class="btn-list">저장</button>'
@@ -307,7 +323,18 @@
       e.preventDefault();
       var title = document.getElementById('eTitle').value.trim();
       var content = document.getElementById('eContent').value.trim();
-      if(!title || !content) return;
+      var err = document.getElementById('editError');
+      if(!title){
+        err.textContent = '제목을 입력해 주세요.';
+        err.style.display = 'block';
+        return;
+      }
+      if(!content){
+        err.textContent = '내용을 입력해 주세요.';
+        err.style.display = 'block';
+        return;
+      }
+      err.style.display = 'none';
 
       fetch('/api/posts/' + encodeURIComponent(id), {
         method: 'PUT',
@@ -324,6 +351,11 @@
           }
           currentPost = res.data.post;
           renderView(currentPost);
+        })
+        .catch(function(){
+          var err = document.getElementById('editError');
+          err.textContent = '네트워크 오류로 수정하지 못했습니다.';
+          err.style.display = 'block';
         });
     });
   }
