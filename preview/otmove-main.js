@@ -50,45 +50,78 @@
       window.addEventListener('scroll', updateHeaderBg, {passive:true});
       window.addEventListener('resize', updateHeaderBg);
 
-      var heroSlides = document.querySelectorAll('.hero-slide');
+      // .hero-slide 구조를 우선 쓰고, 없으면(예전 .hero-media img 구조) 슬라이더를 아예 초기화하지 않는다 —
+      // 그 경우 CSS가 opacity 제어를 하지 않으므로 이미지가 기본 상태로 그대로 보인다.
+      var heroSlideEls = Array.prototype.slice.call(document.querySelectorAll('.hero-slide'));
       var heroIndexEl = document.querySelector('.hero-index');
       var heroPrevBtn = document.querySelector('.hero-arrow.prev');
       var heroNextBtn = document.querySelector('.hero-arrow.next');
-      var currentHeroSlide = 0;
+      var currentSlideEl = null;
       var heroTimer = null;
+      var brokenHeroSlides = [];
 
-      function showHeroSlide(i){
-        if(!heroSlides.length) return;
-        currentHeroSlide = (i + heroSlides.length) % heroSlides.length;
-        heroSlides.forEach(function(slide, idx){
-          slide.classList.toggle('active', idx === currentHeroSlide);
+      function isBroken(slide){
+        return brokenHeroSlides.indexOf(slide) !== -1;
+      }
+      function markHeroSlideBroken(slide){
+        if(isBroken(slide)) return;
+        brokenHeroSlides.push(slide);
+        if(slide.classList.contains('active')){
+          showHeroSlide(1);
+        }
+      }
+      // 로드 실패한(또는 이미지가 없는 카페24 CDN 경로 등으로 깨진) 슬라이드는 회전에서 제외한다.
+      function heroNodes(){
+        return heroSlideEls.filter(function(slide){ return !isBroken(slide); });
+      }
+
+      heroSlideEls.forEach(function(slide){
+        var img = slide.querySelector('img');
+        if(!img) return;
+        if(img.complete){
+          if(img.naturalWidth === 0) markHeroSlideBroken(slide);
+        }else{
+          img.addEventListener('error', function(){ markHeroSlideBroken(slide); });
+          img.addEventListener('load', function(){
+            if(img.naturalWidth === 0) markHeroSlideBroken(slide);
+          });
+        }
+      });
+
+      function showHeroSlide(step){
+        var nodes = heroNodes();
+        if(!nodes.length) return;
+        var currentIdx = currentSlideEl ? nodes.indexOf(currentSlideEl) : -1;
+        var nextIdx = currentIdx === -1 ? 0 : (currentIdx + step + nodes.length) % nodes.length;
+        currentSlideEl = nodes[nextIdx];
+        heroSlideEls.forEach(function(slide){
+          slide.classList.toggle('active', slide === currentSlideEl);
         });
         if(heroIndexEl){
-          var total = heroSlides.length;
-          var num = String(currentHeroSlide + 1).padStart(2, '0');
-          heroIndexEl.textContent = num + ' / ' + String(total).padStart(2, '0');
+          var num = String(nextIdx + 1).padStart(2, '0');
+          heroIndexEl.textContent = num + ' / ' + String(nodes.length).padStart(2, '0');
         }
       }
       function startHeroAutoplay(){
         if(heroTimer) clearInterval(heroTimer);
-        if(heroSlides.length > 1){
+        if(heroNodes().length > 1){
           heroTimer = setInterval(function(){
-            showHeroSlide(currentHeroSlide + 1);
+            showHeroSlide(1);
           }, 2000);
         }
       }
-      if(heroSlides.length){
+      if(heroSlideEls.length){
         showHeroSlide(0);
         startHeroAutoplay();
         if(heroPrevBtn){
           heroPrevBtn.addEventListener('click', function(){
-            showHeroSlide(currentHeroSlide - 1);
+            showHeroSlide(-1);
             startHeroAutoplay();
           });
         }
         if(heroNextBtn){
           heroNextBtn.addEventListener('click', function(){
-            showHeroSlide(currentHeroSlide + 1);
+            showHeroSlide(1);
             startHeroAutoplay();
           });
         }
