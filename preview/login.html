@@ -1,0 +1,120 @@
+<!doctype html>
+<!--
+  정적 미리보기 빌드. 카페24 member_login 모듈이 채우는 {$form.member_id} 등은
+  실제 로그인 동작 없이 모양만 보여주는 입력창으로 대체했습니다.
+  실제 업로드용 소스는 저장소 루트의 auth.html / login.html 을 사용하세요.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAT MAUVE | 오트모브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#FFF4E8;--blush:#F4D9DC;--rose:#E3AEB8;--mauve:#7A4B56;--mauve-deep:#5A3540;--ink:#2A2422;--taupe:#C9B8AE;--line:#E7D9D4;--white:#FFFFFF;--font-body:"Pretendard","Noto Sans KR",sans-serif;}
+body#auth{margin:0;padding:0;font-family:var(--font-body);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;min-height:100vh;}
+body#auth *{box-sizing:border-box;}
+body#auth a{color:inherit;text-decoration:none;}
+body#auth img{border:0;}
+.auth-topbar{padding:22px 32px;text-align:center;border-bottom:1px solid var(--line);}
+.auth-topbar img{height:34px;width:auto;}
+
+/* ---------- 로그인 : 좌우 분할 ---------- */
+.auth-wrap{display:flex;min-height:calc(100vh - 79px);}
+.auth-media{flex:1 1 50%;position:relative;min-height:420px;overflow:hidden;}
+.auth-media img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+.auth-panel{flex:1 1 50%;display:flex;align-items:center;justify-content:center;padding:60px 40px;}
+.auth-form{width:100%;max-width:400px;}
+.auth-form h1{font-weight:700;font-size:26px;letter-spacing:.04em;margin:0 0 38px;color:var(--ink);}
+.auth-form .field{position:relative;margin-bottom:26px;}
+.auth-form .field>label{display:block;margin:0;width:100%;}
+.auth-form .field input{width:100%;height:auto;padding:10px 2px 12px;border:none;border-bottom:1px solid var(--line);border-radius:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s ease;}
+.auth-form .field input::placeholder{color:var(--taupe);}
+.auth-form .field input:focus{border-bottom-color:var(--mauve);}
+.auth-form .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;font-size:12px;color:var(--taupe);}
+.auth-form .field-row label{display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer;color:var(--taupe);font-size:12px;}
+.auth-form .field-row input[type=checkbox]{width:14px;height:14px;margin:0;accent-color:var(--ink);}
+.auth-form .field-row p,.auth-form .field-row span{margin:0;display:inline-flex;align-items:center;gap:6px;}
+.btn-block{display:block;width:100%;padding:15px 0;text-align:center;font-size:13.5px;font-weight:600;letter-spacing:.02em;border-radius:2px;margin-bottom:14px;transition:opacity .2s ease,background .2s ease;}
+.btn-signin{background:var(--ink);color:var(--ivory);}
+.btn-signin:hover{background:var(--mauve-deep);}
+.btn-naver{background:#03C75A;color:var(--white);display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-naver .badge-mark{width:18px;height:18px;border-radius:3px;background:var(--white);color:#03C75A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+.btn-kakao{background:#FEE500;color:#391B1B;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-kakao svg{width:16px;height:16px;fill:#391B1B;}
+.btn-outline-block{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn-outline-block:hover{border-color:var(--mauve);color:var(--mauve);}
+.or-divider{display:flex;align-items:center;gap:14px;margin:18px 0;font-size:11px;letter-spacing:.1em;color:var(--taupe);}
+.or-divider::before,.or-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+.helper-links{display:flex;justify-content:center;gap:14px;margin:22px 0 0;padding:0;font-size:12px;color:var(--taupe);list-style:none;}
+.helper-links li{list-style:none;}
+.helper-links a:hover{color:var(--mauve);}
+.helper-links .sep{color:var(--line);}
+.help-bubble{position:fixed;left:24px;bottom:24px;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--ivory);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;box-shadow:0 10px 24px -12px rgba(42,36,34,.5);z-index:20;}
+
+body#auth .btn-block{text-decoration:none;}
+body#auth .btn-signin{color:var(--ivory);}
+body#auth .btn-naver{color:var(--white);}
+body#auth .btn-kakao{color:#391B1B;}
+body#auth .btn-outline-block{color:var(--ink);}
+body#auth .help-bubble{color:var(--ivory);}
+.auth-form .field-row:not(:has(input[type=checkbox])){justify-content:flex-end;}
+@media (max-width:800px){.auth-wrap{flex-direction:column;}.auth-media{min-height:280px;}.auth-panel{padding:48px 24px;}}
+</style>
+</head>
+<body id="auth">
+
+<div class="auth-topbar">
+  <a href="index.html"><img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/logo.png" alt="OAT MAUVE"></a>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-media">
+    <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_01.jpg" alt="OAT MAUVE">
+  </div>
+
+  <div class="auth-panel">
+    <!-- 실제 배포본의 카페24 member_login 모듈 대신, 모양만 보여주는 정적 입력창입니다. -->
+    <div class="auth-form">
+      <h1>Sign In</h1>
+
+      <div class="field">
+        <input type="text" name="member_id" id="member_id" placeholder="아이디 또는 이메일">
+      </div>
+      <div class="field">
+        <input type="password" name="member_passwd" id="member_passwd" placeholder="비밀번호">
+      </div>
+
+      <div class="field-row">
+        <label><input type="checkbox"> 아이디 저장</label>
+        <span class="secure-note">보안접속</span>
+      </div>
+
+      <a href="#none" class="btn-block btn-signin">로그인</a>
+
+      <div class="or-divider">OR</div>
+
+      <a href="#none" class="btn-block btn-naver"><span class="badge-mark">N</span> NAVER 로그인</a>
+      <a href="#none" class="btn-block btn-kakao"><svg viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.86 5.18 4.66 6.58-.2.74-.73 2.68-.84 3.1-.13.52.19.51.4.37.16-.11 2.6-1.77 3.66-2.49.68.1 1.38.15 2.12.15 5.52 0 10-3.48 10-7.71C22 6.48 17.52 3 12 3z"/></svg>Kakao 로그인</a>
+
+      <div class="or-divider">OR</div>
+
+      <a href="#none" class="btn-block btn-outline-block">Create New Account</a>
+
+      <ul class="helper-links">
+        <li><a href="#none">아이디찾기</a></li>
+        <li class="sep">|</li>
+        <li><a href="#none">비밀번호찾기</a></li>
+        <li class="sep">|</li>
+        <li><a href="#none">주문조회</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<a href="#none" class="help-bubble">help?</a>
+
+</body>
+</html>

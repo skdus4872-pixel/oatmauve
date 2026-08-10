@@ -1,0 +1,437 @@
+<!doctype html>
+<!--
+  정적 미리보기 빌드. 카페24 서버에서 치환되는 {$...} 템플릿 태그와
+  @css/@js/@layout/@contents 지시어를 실제 값으로 바꿔 넣은 파일입니다.
+  실제 업로드용 소스는 저장소 루트의 layout.html / index.html 을 사용하세요.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAT MAUVE | 오트모브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="otmove-main.css">
+</head>
+<body>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+    </div>
+  </div>
+
+  <!-- ===== TOP UTILITY BAR ===== -->
+  <div class="util-bar">
+    <div class="wrap">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">상품등록</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-wrap wrap" style="position:relative;">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand-row">
+        <a class="logo" href="index.html"><img src="logo.png" alt="OAT MAUVE"></a>
+      </div>
+      <div class="header-icons">
+        <a href="#none" aria-label="마이페이지">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </a>
+        <a href="#none" aria-label="장바구니">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a href="#none" aria-label="검색">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <div class="wrap">
+        <ul>
+          <li><a href="#none">NEW-5%</a></li>
+          <li><a href="#none">26SS SALE</a></li>
+          <li>
+            <a href="#none">TOPS</a>
+            <div class="sub-nav">
+              <a href="#none">T-Shirts</a>
+              <a href="#none">Shirts &amp; Blouses</a>
+              <a href="#none">Sleeveless</a>
+              <a href="#none">Cardigan</a>
+              <a href="#none">Knitwear</a>
+            </div>
+          </li>
+          <li>
+            <a href="#none">OUTWEAR</a>
+            <div class="sub-nav">
+              <a href="#none">Coats</a>
+              <a href="#none">Jackets</a>
+            </div>
+          </li>
+          <li>
+            <a href="#none">BOTTOM</a>
+            <div class="sub-nav">
+              <a href="#none">Skirts</a>
+              <a href="#none">Pants</a>
+            </div>
+          </li>
+          <li>
+            <a href="#none">DRESS</a>
+            <div class="sub-nav">
+              <a href="#none">미니원피스</a>
+              <a href="#none">미디원피스</a>
+              <a href="#none">맥시원피스</a>
+            </div>
+          </li>
+          <li>
+            <a href="#none">SHOES</a>
+            <div class="sub-nav">
+              <a href="#none">플랫</a>
+              <a href="#none">힐</a>
+              <a href="#none">스니커즈</a>
+              <a href="#none">샌들</a>
+            </div>
+          </li>
+          <li>
+            <a href="#none">ACC</a>
+            <div class="sub-nav">
+              <a href="#none">백</a>
+              <a href="#none">주얼리</a>
+              <a href="#none">벨트</a>
+              <a href="#none">스카프</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== SIDE DRAWER MENU ===== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <a class="drawer-logo" href="index.html"><img src="logo.png" alt="OAT MAUVE" style="height:24px;width:auto;"></a>
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="메뉴 닫기">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="#none">NEW-5%</a></li>
+      <li><a href="#none">26SS SALE</a></li>
+      <li>
+        <a href="#none">TOPS</a>
+        <div class="drawer-sub">
+          <a href="#none">T-Shirts</a>
+          <a href="#none">Shirts &amp; Blouses</a>
+          <a href="#none">Sleeveless</a>
+          <a href="#none">Cardigan</a>
+          <a href="#none">Knitwear</a>
+        </div>
+      </li>
+      <li>
+        <a href="#none">OUTWEAR</a>
+        <div class="drawer-sub">
+          <a href="#none">Coats</a>
+          <a href="#none">Jackets</a>
+        </div>
+      </li>
+      <li>
+        <a href="#none">BOTTOM</a>
+        <div class="drawer-sub">
+          <a href="#none">Skirts</a>
+          <a href="#none">Pants</a>
+        </div>
+      </li>
+      <li>
+        <a href="#none">DRESS</a>
+        <div class="drawer-sub">
+          <a href="#none">미니원피스</a>
+          <a href="#none">미디원피스</a>
+          <a href="#none">맥시원피스</a>
+        </div>
+      </li>
+      <li>
+        <a href="#none">SHOES</a>
+        <div class="drawer-sub">
+          <a href="#none">플랫</a>
+          <a href="#none">힐</a>
+          <a href="#none">스니커즈</a>
+          <a href="#none">샌들</a>
+        </div>
+      </li>
+      <li>
+        <a href="#none">ACC</a>
+        <div class="drawer-sub">
+          <a href="#none">백</a>
+          <a href="#none">주얼리</a>
+          <a href="#none">벨트</a>
+          <a href="#none">스카프</a>
+        </div>
+      </li>
+    </ul>
+    <div class="drawer-utility">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">상품등록</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </aside>
+
+  <!-- ===== PAGE BODY (원래 index.html 의 <!--@contents--> 자리) ===== -->
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <div class="hero-media" aria-label="26SS Collection 상품 보러가기">
+      <div class="hero-slide active">
+        <a href="#none" aria-label="배너 1 링크">
+          <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_01.jpg" alt="OAT MAUVE 26SS Collection">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="#none" aria-label="배너 2 링크">
+          <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_02.jpg" alt="OAT MAUVE 26SS Collection">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="#none" aria-label="배너 3 링크">
+          <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_03.jpg" alt="OAT MAUVE 26SS Collection">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="#none" aria-label="배너 4 링크">
+          <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_04.jpg" alt="OAT MAUVE 26SS Collection">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="#none" aria-label="배너 5 링크">
+          <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_05.jpg" alt="OAT MAUVE 26SS Collection">
+        </a>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <span class="hero-index">01 / 05</span>
+    <button class="hero-arrow prev" type="button" aria-label="이전 배너">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="hero-arrow next" type="button" aria-label="다음 배너">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="hero-scroll-nav">
+      <button type="button" aria-label="맨 위로" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'});">
+        <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+      </button>
+      <button type="button" aria-label="아래로 스크롤" onclick="document.getElementById('new').scrollIntoView({behavior:'smooth'});">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="admin-product-cta">
+    <div class="wrap">
+      <div class="admin-product-card">
+        <div>
+          <span class="eyebrow">Cafe24 Admin</span>
+          <h2>상품 등록과 진열을 바로 관리하세요.</h2>
+          <p>관리자 로그인 상태에서 아래 버튼으로 상품 등록 화면으로 이동할 수 있습니다.</p>
+        </div>
+        <div class="admin-product-actions">
+          <a class="btn btn-primary" href="#none">상품 등록</a>
+          <a class="btn btn-outline" href="#none">상품 목록</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEW ARRIVALS SLIDER (샘플 데이터 — 실제 상품은 카페24 product_listmain_1 모듈이 채웁니다) ===== -->
+  <section class="product-section" id="new">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow best-title">New-5%</span>
+        </div>
+        <div class="section-head-right">
+          <a class="view-all" href="#none">전체보기</a>
+          <div class="slider-arrows">
+            <button class="slider-arrow prev" type="button" aria-label="이전 상품">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="slider-arrow next" type="button" aria-label="다음 상품">
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="product-slider-wrap">
+        <ul class="product-grid stagger" id="newProductSlider">
+          <li class="card">
+            <div class="badge">NEW</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph"><a href="#none"></a></div>
+            <div class="card-info">
+              <p class="colorway">Sample colorway</p>
+              <p class="pname">Sample Item 01</p>
+              <div class="price-row"><span class="final">58,000</span></div>
+            </div>
+          </li>
+          <li class="card">
+            <div class="badge">NEW</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph"><a href="#none"></a></div>
+            <div class="card-info">
+              <p class="colorway">Sample colorway</p>
+              <p class="pname">Sample Item 02</p>
+              <div class="price-row"><span class="final">64,000</span></div>
+            </div>
+          </li>
+          <li class="card">
+            <div class="badge">NEW</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph"><a href="#none"></a></div>
+            <div class="card-info">
+              <p class="colorway">Sample colorway</p>
+              <p class="pname">Sample Item 03</p>
+              <div class="price-row"><span class="final">42,000</span></div>
+            </div>
+          </li>
+          <li class="card">
+            <div class="badge">NEW</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph"><a href="#none"></a></div>
+            <div class="card-info">
+              <p class="colorway">Sample colorway</p>
+              <p class="pname">Sample Item 04</p>
+              <div class="price-row"><span class="final">76,000</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WEEKLY BEST (샘플 데이터 — 실제 상품은 카페24 product_listmain_2 모듈이 채웁니다) ===== -->
+  <section class="best-section" id="best">
+    <div class="wrap">
+      <div class="best-head">
+        <h2 class="best-title">Weekly Best Item</h2>
+        <a class="view-all" href="#none">전체보기</a>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" type="button" data-filter="all">All</button>
+        <button class="filter-tab" type="button" data-filter="top">Top</button>
+        <button class="filter-tab" type="button" data-filter="pants">Pants</button>
+        <button class="filter-tab" type="button" data-filter="skirts">Skirts</button>
+        <button class="filter-tab" type="button" data-filter="dress">Dress</button>
+        <button class="filter-tab" type="button" data-filter="shoes">Shoes</button>
+      </div>
+      <ul class="product-grid best-grid" id="bestGrid">
+        <li class="card" data-category="top">
+          <div class="rank"></div>
+          <div class="wish-btn">♡</div>
+          <div class="ph"><a href="#none"></a></div>
+          <div class="card-info">
+            <p class="pname">Sample Item 05</p>
+            <div class="price-row"><span class="final">52,000</span></div>
+          </div>
+        </li>
+        <li class="card" data-category="pants">
+          <div class="rank"></div>
+          <div class="wish-btn">♡</div>
+          <div class="ph"><a href="#none"></a></div>
+          <div class="card-info">
+            <p class="pname">Sample Item 06</p>
+            <div class="price-row"><span class="final">61,000</span></div>
+          </div>
+        </li>
+        <li class="card" data-category="skirts">
+          <div class="rank"></div>
+          <div class="wish-btn">♡</div>
+          <div class="ph"><a href="#none"></a></div>
+          <div class="card-info">
+            <p class="pname">Sample Item 07</p>
+            <div class="price-row"><span class="final">48,000</span></div>
+          </div>
+        </li>
+        <li class="card" data-category="dress">
+          <div class="rank"></div>
+          <div class="wish-btn">♡</div>
+          <div class="ph"><a href="#none"></a></div>
+          <div class="card-info">
+            <p class="pname">Sample Item 08</p>
+            <div class="price-row"><span class="final">89,000</span></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== INSTAGRAM ===== -->
+  <section class="insta-section">
+    <span class="eyebrow insta-handle">@oat_mauve</span>
+    <div class="wrap">
+      <div class="insta-grid">
+        <a class="ph" href="#none"><span>IG 01</span></a>
+        <a class="ph" href="#none"><span>IG 02</span></a>
+        <a class="ph" href="#none"><span>IG 03</span></a>
+        <a class="ph" href="#none"><span>IG 04</span></a>
+        <a class="ph" href="#none"><span>IG 05</span></a>
+        <a class="ph" href="#none"><span>IG 06</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Customer</h4>
+          <a href="#none">공지사항</a>
+          <a href="#none">교환/반품</a>
+          <a href="#none">이용약관</a>
+          <a href="#none">개인정보처리방침</a>
+          <a href="naver-pay.html">네이버페이 결제안내</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#none">브랜드 스토리</a>
+          <a href="#none">멤버십</a>
+          <a href="#none">인스타그램</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="biz-info">
+          오트모브 (oatmauve) &nbsp;|&nbsp; 대표자 : 문해나 &nbsp;|&nbsp; 사업자등록번호 : 394-13-03009<br>
+          통신판매업신고 : 제 2026-인천연수구-1644 호 &nbsp;|&nbsp; 주소 : 인천광역시 연수구 컨벤시아대로 90, 501동 905호 (송도동, 인천힐스테이트) &nbsp;|&nbsp; 대표전화 : 010-4949-9712<br>
+          © OAT MAUVE. All rights reserved. &nbsp;|&nbsp; Hosting by Cafe24
+        </div>
+        <div class="sns-row">
+          <a href="https://www.instagram.com/oat_mauve/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+          <a href="#none" aria-label="Kakao">K</a>
+          <a href="#none" aria-label="Blog">B</a>
+          <a href="#none" aria-label="Youtube">Y</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script src="otmove-main.js"></script>
+</body>
+</html>
