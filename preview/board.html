@@ -175,12 +175,12 @@
   <main class="board-main">
     <h1 class="board-title">상품 Q&amp;A</h1>
 
-    <nav class="board-tabs">
-      <a href="#none" class="board-tab">공지사항</a>
-      <a href="#none" class="board-tab">상품 사용후기</a>
-      <a href="#none" class="board-tab active">상품 Q&amp;A</a>
-      <a href="#none" class="board-tab">이용안내 FAQ</a>
-      <a href="#none" class="board-tab">교환/반품 문의</a>
+    <nav class="board-tabs" id="boardTabs">
+      <a href="#none" class="board-tab" data-category="공지사항">공지사항</a>
+      <a href="#none" class="board-tab" data-category="상품 사용후기">상품 사용후기</a>
+      <a href="#none" class="board-tab active" data-category="상품 Q&amp;A">상품 Q&amp;A</a>
+      <a href="#none" class="board-tab" data-category="이용안내 FAQ">이용안내 FAQ</a>
+      <a href="#none" class="board-tab" data-category="교환/반품 문의">교환/반품 문의</a>
     </nav>
 
     <table class="board-table">
@@ -195,9 +195,9 @@
           <th class="col-views">조회</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="boardBody">
         <tr>
-          <td colspan="7">검색결과가 없습니다.</td>
+          <td colspan="7">불러오는 중...</td>
         </tr>
       </tbody>
     </table>
@@ -218,7 +218,7 @@
         <input type="text" placeholder="검색어를 입력하세요">
         <button type="button">찾기</button>
       </div>
-      <a href="#none" class="board-write">글쓰기</a>
+      <a href="write.html" class="board-write">글쓰기</a>
     </div>
 
     <div class="board-move-row">
@@ -273,5 +273,72 @@
   </footer>
 
 <script src="otmove-main.js"></script>
+<script>
+(function(){
+  var tabs = document.querySelectorAll('#boardTabs .board-tab');
+  var body = document.getElementById('boardBody');
+  var allPosts = [];
+  var activeCategory = '상품 Q&A';
+
+  function escapeHtml(str){
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  function formatDate(ms){
+    var d = new Date(Number(ms));
+    if(isNaN(d.getTime())) return '';
+    return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function render(){
+    var filtered = allPosts.filter(function(p){ return p.category === activeCategory; });
+    if(!filtered.length){
+      body.innerHTML = '<tr><td colspan="7">검색결과가 없습니다.</td></tr>';
+      return;
+    }
+    var rows = filtered.map(function(p, idx){
+      var no = filtered.length - idx;
+      return '<tr>'
+        + '<td class="col-check"><input type="checkbox" aria-label="선택"></td>'
+        + '<td class="col-no">' + no + '</td>'
+        + '<td class="col-product">-</td>'
+        + '<td class="col-title" style="text-align:left;padding-left:24px;">'
+        +   '<a href="post.html?id=' + encodeURIComponent(p.id) + '">' + escapeHtml(p.title) + '</a>'
+        + '</td>'
+        + '<td class="col-writer">' + escapeHtml(p.nickname) + '</td>'
+        + '<td class="col-date">' + formatDate(p.createdAt) + '</td>'
+        + '<td class="col-views">' + (p.views || 0) + '</td>'
+        + '</tr>';
+    }).join('');
+    body.innerHTML = rows;
+  }
+
+  function setActiveTab(category){
+    activeCategory = category;
+    tabs.forEach(function(tab){
+      tab.classList.toggle('active', tab.getAttribute('data-category') === category);
+    });
+    render();
+  }
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(e){
+      e.preventDefault();
+      setActiveTab(tab.getAttribute('data-category'));
+    });
+  });
+
+  fetch('/api/posts')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      allPosts = data.posts || [];
+      render();
+    })
+    .catch(function(){
+      body.innerHTML = '<tr><td colspan="7">목록을 불러오지 못했습니다.</td></tr>';
+    });
+})();
+</script>
 </body>
 </html>

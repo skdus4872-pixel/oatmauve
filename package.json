@@ -1,0 +1,9 @@
+{
+  "name": "oatmauve-preview",
+  "private": true,
+  "version": "1.0.0",
+  "description": "API functions for the Vercel static preview (preview/board.html). Not part of the Cafe24 upload files.",
+  "dependencies": {
+    "@upstash/redis": "latest"
+  }
+}

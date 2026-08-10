@@ -1,0 +1,352 @@
+<!doctype html>
+<!--
+  정적 미리보기 빌드. /api/posts/[id] (Vercel Serverless Function + Upstash Redis)를
+  호출해 글을 보여주고, 비밀번호(작성자 본인) 또는 관리자 비밀번호로 수정·삭제합니다.
+  카페24 업로드 대상이 아니라 Vercel 미리보기 전용입니다.
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>게시글 | OAT MAUVE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="otmove-main.css">
+<style>
+  body#sub .util-bar{color:var(--taupe);}
+
+  .board-breadcrumb{
+    padding:14px 32px 0;
+    font-size:12px;color:var(--taupe);
+    display:flex;justify-content:flex-end;gap:6px;
+  }
+  .board-breadcrumb a{color:var(--taupe);}
+  .board-breadcrumb a:hover{color:var(--mauve);}
+  .board-breadcrumb .current{color:var(--ink);}
+
+  .board-main{padding:18px 32px 90px;max-width:760px;margin:0 auto;}
+
+  .post-category{font-size:12px;color:var(--mauve);letter-spacing:.04em;margin-bottom:8px;}
+  .post-title{font-size:24px;font-weight:700;color:var(--ink);margin:0 0 14px;word-break:break-word;}
+  .post-meta{
+    display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--taupe);
+    padding-bottom:18px;border-bottom:1px solid var(--ink);
+  }
+  .post-content{
+    padding:32px 2px;min-height:160px;font-size:14px;line-height:1.9;color:var(--ink);
+    white-space:pre-wrap;word-break:break-word;
+    border-bottom:1px solid var(--line);
+  }
+
+  .post-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;}
+  .post-actions button,.post-actions a{
+    display:inline-block;padding:10px 20px;border-radius:2px;font-size:12.5px;font-weight:600;
+    border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer;
+  }
+  .post-actions button:hover{border-color:var(--rose);color:var(--mauve);}
+  .post-actions .btn-list{background:var(--ink);border-color:var(--ink);color:var(--ivory);}
+  .post-actions .btn-list:hover{background:var(--mauve-deep);color:var(--ivory);}
+  .post-actions .btn-danger:hover{border-color:var(--rose);color:#b5334a;}
+
+  .verify-box{
+    display:none;margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:6px;
+    background:var(--white);
+    align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .verify-box.show{display:flex;}
+  .verify-box input[type=password]{
+    flex:1;min-width:160px;border:1px solid var(--line);border-radius:2px;background:var(--ivory);
+    font:inherit;font-size:13px;color:var(--ink);padding:10px 12px;
+  }
+  .verify-box button{
+    padding:10px 18px;border-radius:2px;font-size:12.5px;font-weight:600;
+    border:1px solid var(--ink);background:var(--ink);color:var(--ivory);cursor:pointer;
+  }
+  .verify-box .verify-cancel{background:var(--white);color:var(--ink);border-color:var(--line);}
+  .verify-note{width:100%;font-size:12px;color:#b5334a;display:none;}
+  .verify-note.show{display:block;}
+
+  .edit-form .form-row{margin-bottom:18px;}
+  .edit-form label{display:block;font-size:12.5px;color:var(--taupe);margin-bottom:6px;}
+  .edit-form input[type=text],.edit-form textarea{
+    width:100%;border:1px solid var(--line);border-radius:2px;background:var(--white);
+    font:inherit;font-size:13.5px;color:var(--ink);padding:11px 12px;
+  }
+  .edit-form textarea{min-height:220px;line-height:1.7;resize:vertical;}
+
+  @media (max-width:640px){
+    .board-main{padding:16px 20px 70px;}
+    .board-breadcrumb{padding:12px 20px 0;}
+  }
+</style>
+</head>
+<body id="sub">
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+    </div>
+  </div>
+
+  <div class="util-bar">
+    <div class="wrap">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </div>
+
+  <header class="site-header header-scrolled">
+    <div class="header-wrap wrap" style="position:relative;">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand-row">
+        <a class="logo" href="index.html"><img src="logo.png" alt="OAT MAUVE"></a>
+      </div>
+      <div class="header-icons">
+        <a href="#none" aria-label="마이페이지">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </a>
+        <a href="#none" aria-label="장바구니">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a href="#none" aria-label="검색">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <a class="drawer-logo" href="index.html"><img src="logo.png" alt="OAT MAUVE" style="height:24px;width:auto;"></a>
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="메뉴 닫기">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="index.html">쇼핑 계속하기</a></li>
+      <li><a href="board.html">게시판</a></li>
+    </ul>
+    <div class="drawer-utility">
+      <a href="#none">마이페이지</a>
+      <a href="#none">주문조회</a>
+      <a href="#none">고객센터</a>
+      <a href="login.html">로그인</a>
+      <a href="#none">회원가입</a>
+    </div>
+  </aside>
+
+  <div class="board-breadcrumb">
+    <a href="index.html">홈</a> / <a href="board.html">게시판</a> / <span class="current" id="crumbCategory">상품 Q&amp;A</span>
+  </div>
+
+  <main class="board-main" id="postMain">
+    <p>불러오는 중...</p>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Customer</h4>
+          <a href="#none">공지사항</a>
+          <a href="#none">교환/반품</a>
+          <a href="#none">이용약관</a>
+          <a href="#none">개인정보처리방침</a>
+          <a href="naver-pay.html">네이버페이 결제안내</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#none">브랜드 스토리</a>
+          <a href="#none">멤버십</a>
+          <a href="#none">인스타그램</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="biz-info">
+          오트모브 (oatmauve) &nbsp;|&nbsp; 대표자 : 문해나 &nbsp;|&nbsp; 사업자등록번호 : 394-13-03009<br>
+          통신판매업신고 : 제 2026-인천연수구-1644 호 &nbsp;|&nbsp; 주소 : 인천광역시 연수구 컨벤시아대로 90, 501동 905호 (송도동, 인천힐스테이트) &nbsp;|&nbsp; 대표전화 : 010-4949-9712<br>
+          © OAT MAUVE. All rights reserved. &nbsp;|&nbsp; Hosting by Cafe24
+        </div>
+        <div class="sns-row">
+          <a href="https://www.instagram.com/oat_mauve/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+          <a href="#none" aria-label="Kakao">K</a>
+          <a href="#none" aria-label="Blog">B</a>
+          <a href="#none" aria-label="Youtube">Y</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script src="otmove-main.js"></script>
+<script>
+(function(){
+  var main = document.getElementById('postMain');
+  var crumbCategory = document.getElementById('crumbCategory');
+  var params = new URLSearchParams(location.search);
+  var id = params.get('id');
+  var currentPost = null;
+
+  function escapeHtml(str){
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  function formatDateTime(ms){
+    var d = new Date(Number(ms));
+    if(isNaN(d.getTime())) return '';
+    return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0')
+      + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function renderView(post){
+    crumbCategory.textContent = post.category || '게시판';
+    main.innerHTML =
+      '<div class="post-category">' + escapeHtml(post.category) + '</div>'
+      + '<h1 class="post-title">' + escapeHtml(post.title) + '</h1>'
+      + '<div class="post-meta">'
+      +   '<span>작성자 ' + escapeHtml(post.nickname) + '</span>'
+      +   '<span>' + formatDateTime(post.createdAt) + '</span>'
+      +   '<span>조회 ' + (post.views || 0) + '</span>'
+      + '</div>'
+      + '<div class="post-content">' + escapeHtml(post.content) + '</div>'
+      + '<div class="post-actions">'
+      +   '<a class="btn-list" href="board.html">목록</a>'
+      +   '<button type="button" id="editBtn">수정</button>'
+      +   '<button type="button" class="btn-danger" id="deleteBtn">삭제</button>'
+      + '</div>'
+      + '<div class="verify-box" id="deleteVerify">'
+      +   '<input type="password" id="deletePw" placeholder="비밀번호 (본인 글 또는 관리자 비밀번호)">'
+      +   '<button type="button" id="deleteConfirm">삭제 확인</button>'
+      +   '<button type="button" class="verify-cancel" id="deleteCancel">취소</button>'
+      +   '<span class="verify-note" id="deleteNote">비밀번호가 일치하지 않습니다.</span>'
+      + '</div>';
+
+    document.getElementById('editBtn').addEventListener('click', showEditPasswordPrompt);
+    document.getElementById('deleteBtn').addEventListener('click', function(){
+      document.getElementById('deleteVerify').classList.add('show');
+    });
+    document.getElementById('deleteCancel').addEventListener('click', function(){
+      document.getElementById('deleteVerify').classList.remove('show');
+      document.getElementById('deleteNote').classList.remove('show');
+    });
+    document.getElementById('deleteConfirm').addEventListener('click', function(){
+      var pw = document.getElementById('deletePw').value;
+      if(!pw){ return; }
+      fetch('/api/posts/' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      })
+        .then(function(r){ return r.json().then(function(data){ return { ok: r.ok, data: data }; }); })
+        .then(function(res){
+          if(!res.ok){
+            document.getElementById('deleteNote').classList.add('show');
+            return;
+          }
+          location.href = 'board.html';
+        });
+    });
+  }
+
+  function showEditPasswordPrompt(){
+    var actionsEl = document.querySelector('.post-actions');
+    var existing = document.getElementById('editVerify');
+    if(existing){ existing.classList.toggle('show'); return; }
+
+    var box = document.createElement('div');
+    box.className = 'verify-box';
+    box.id = 'editVerify';
+    box.innerHTML =
+      '<input type="password" id="editPw" placeholder="비밀번호 (본인 글 또는 관리자 비밀번호)">'
+      + '<button type="button" id="editConfirm">확인</button>'
+      + '<button type="button" class="verify-cancel" id="editCancel">취소</button>'
+      + '<span class="verify-note" id="editNote">비밀번호가 일치하지 않습니다.</span>';
+    actionsEl.insertAdjacentElement('afterend', box);
+    box.classList.add('show');
+
+    document.getElementById('editCancel').addEventListener('click', function(){
+      box.classList.remove('show');
+    });
+    document.getElementById('editConfirm').addEventListener('click', function(){
+      var pw = document.getElementById('editPw').value;
+      if(!pw) return;
+      renderEditForm(pw);
+    });
+  }
+
+  function renderEditForm(password){
+    main.innerHTML =
+      '<div class="post-category">' + escapeHtml(currentPost.category) + '</div>'
+      + '<h1 class="post-title">글 수정</h1>'
+      + '<div class="form-error" id="editError" style="display:none;color:#b5334a;font-size:13px;margin-bottom:14px;"></div>'
+      + '<form class="edit-form" id="editForm">'
+      +   '<div class="form-row"><label>제목</label><input type="text" id="eTitle" maxlength="200" value="' + escapeHtml(currentPost.title) + '" required></div>'
+      +   '<div class="form-row"><label>내용</label><textarea id="eContent" maxlength="5000" required>' + escapeHtml(currentPost.content) + '</textarea></div>'
+      +   '<div class="post-actions">'
+      +     '<button type="button" id="editCancelSave">취소</button>'
+      +     '<button type="submit" class="btn-list">저장</button>'
+      +   '</div>'
+      + '</form>';
+
+    document.getElementById('editCancelSave').addEventListener('click', function(){
+      renderView(currentPost);
+    });
+    document.getElementById('editForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      var title = document.getElementById('eTitle').value.trim();
+      var content = document.getElementById('eContent').value.trim();
+      if(!title || !content) return;
+
+      fetch('/api/posts/' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password, title: title, content: content })
+      })
+        .then(function(r){ return r.json().then(function(data){ return { ok: r.ok, data: data }; }); })
+        .then(function(res){
+          if(!res.ok){
+            var err = document.getElementById('editError');
+            err.textContent = res.data.error || '수정에 실패했습니다.';
+            err.style.display = 'block';
+            return;
+          }
+          currentPost = res.data.post;
+          renderView(currentPost);
+        });
+    });
+  }
+
+  if(!id){
+    main.innerHTML = '<p>잘못된 접근입니다. <a href="board.html">목록으로</a></p>';
+    return;
+  }
+
+  fetch('/api/posts/' + encodeURIComponent(id))
+    .then(function(r){ return r.json().then(function(data){ return { ok: r.ok, data: data }; }); })
+    .then(function(res){
+      if(!res.ok){
+        main.innerHTML = '<p>' + escapeHtml(res.data.error || '글을 찾을 수 없습니다.') + ' <a href="board.html">목록으로</a></p>';
+        return;
+      }
+      currentPost = res.data.post;
+      renderView(currentPost);
+    })
+    .catch(function(){
+      main.innerHTML = '<p>글을 불러오지 못했습니다. <a href="board.html">목록으로</a></p>';
+    });
+})();
+</script>
+</body>
+</html>
