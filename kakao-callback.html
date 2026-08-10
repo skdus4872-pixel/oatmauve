@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카카오 로그인 처리 중</title>
+<style>
+  body{margin:0;font-family:Arial,sans-serif;background:#FFF4E8;color:#2A2422;display:grid;place-items:center;min-height:100vh;}
+  .box{padding:28px 34px;border:1px solid #E7D9D4;border-radius:12px;background:#fff;box-shadow:0 10px 24px rgba(0,0,0,.06);text-align:center;}
+  .box p{margin:8px 0 0;}
+</style>
+</head>
+<body>
+  <div class="box">
+    <h2>카카오 로그인 처리 중</h2>
+    <p>잠시만 기다려 주세요.</p>
+  </div>
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  var error = params.get('error');
+
+  if(error){
+    alert('카카오 로그인에 실패했습니다.');
+    window.location.href = '/member/login.html';
+    return;
+  }
+
+  if(!code){
+    window.location.href = '/member/login.html';
+    return;
+  }
+
+  localStorage.setItem('kakao_login_code', code);
+  localStorage.setItem('kakao_login_status', 'pending');
+  window.location.href = '/member/login.html';
+})();
+</script>
+</body>
+</html>

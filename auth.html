@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAT MAUVE | 오트모브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- 카페24 기본 UI CSS. 회원가입 폼의 체크박스·단계표시·버튼이 이 파일들에 의존한다. 빼면 폼이 깨진다. -->
+<!--@css(/layout/basic/css/common.css)-->
+<!--@css(/layout/basic/css/ec-base-ui.css)-->
+<!--@css(/layout/basic/css/ec-base-button.css)-->
+<!--@css(/layout/basic/css/ec-base-tooltip.css)-->
+<style>
+:root{--ivory:#FFF4E8;--blush:#F4D9DC;--rose:#E3AEB8;--mauve:#7A4B56;--mauve-deep:#5A3540;--ink:#2A2422;--taupe:#C9B8AE;--line:#E7D9D4;--white:#FFFFFF;--font-body:"Pretendard","Noto Sans KR",sans-serif;}
+body#auth{margin:0;padding:0;font-family:var(--font-body);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;min-height:100vh;}
+body#auth *{box-sizing:border-box;}
+body#auth a{color:inherit;text-decoration:none;}
+body#auth img{border:0;}
+.auth-topbar{padding:22px 32px;text-align:center;border-bottom:1px solid var(--line);}
+.auth-topbar img{height:34px;width:auto;}
+
+/* ---------- 로그인 : 좌우 분할 ---------- */
+.auth-wrap{display:flex;min-height:calc(100vh - 79px);}
+.auth-media{flex:1 1 50%;position:relative;min-height:420px;overflow:hidden;}
+.auth-media img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+.auth-panel{flex:1 1 50%;display:flex;align-items:center;justify-content:center;padding:60px 40px;}
+.auth-form{width:100%;max-width:400px;}
+.auth-form h1{font-weight:700;font-size:26px;letter-spacing:.04em;margin:0 0 38px;color:var(--ink);}
+.auth-form .field{position:relative;margin-bottom:26px;}
+.auth-form .field>label{display:block;margin:0;width:100%;}
+.auth-form .field input{width:100%;height:auto;padding:10px 2px 12px;border:none;border-bottom:1px solid var(--line);border-radius:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s ease;}
+.auth-form .field input::placeholder{color:var(--taupe);}
+.auth-form .field input:focus{border-bottom-color:var(--mauve);}
+.auth-form .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;font-size:12px;color:var(--taupe);}
+.auth-form .field-row label{display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer;color:var(--taupe);font-size:12px;}
+.auth-form .field-row input[type=checkbox]{width:14px;height:14px;margin:0;accent-color:var(--ink);}
+.auth-form .field-row p,.auth-form .field-row span{margin:0;display:inline-flex;align-items:center;gap:6px;}
+.btn-block{display:block;width:100%;padding:15px 0;text-align:center;font-size:13.5px;font-weight:600;letter-spacing:.02em;border-radius:2px;margin-bottom:14px;transition:opacity .2s ease,background .2s ease;}
+.btn-signin{background:var(--ink);color:var(--ivory);}
+.btn-signin:hover{background:var(--mauve-deep);}
+.btn-naver{background:#03C75A;color:var(--white);display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-naver .badge-mark{width:18px;height:18px;border-radius:3px;background:var(--white);color:#03C75A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+.btn-kakao{background:#FEE500;color:#391B1B;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-kakao svg{width:16px;height:16px;fill:#391B1B;}
+.btn-outline-block{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn-outline-block:hover{border-color:var(--mauve);color:var(--mauve);}
+.or-divider{display:flex;align-items:center;gap:14px;margin:18px 0;font-size:11px;letter-spacing:.1em;color:var(--taupe);}
+.or-divider::before,.or-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+.helper-links{display:flex;justify-content:center;gap:14px;margin:22px 0 0;padding:0;font-size:12px;color:var(--taupe);list-style:none;}
+.helper-links li{list-style:none;}
+.helper-links a:hover{color:var(--mauve);}
+.helper-links .sep{color:var(--line);}
+.help-bubble{position:fixed;left:24px;bottom:24px;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--ivory);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;box-shadow:0 10px 24px -12px rgba(42,36,34,.5);z-index:20;}
+
+/* ── body#auth a{color:inherit} 가 버튼 글자색을 덮으므로 같은 특이도로 되살린다 ── */
+body#auth .btn-block{text-decoration:none;}
+body#auth .btn-signin{color:var(--ivory);}
+body#auth .btn-naver{color:var(--white);}
+body#auth .btn-kakao{color:#391B1B;}
+body#auth .btn-outline-block{color:var(--ink);}
+body#auth .help-bubble{color:var(--ivory);}
+/* SNS 로그인이 쇼핑몰에 설정돼 있지 않으면 카페24가 .displaynone 을 붙인다 → OR 구분선도 같이 숨김 */
+.auth-form:has(.btn-naver.displaynone):has(.btn-kakao.displaynone) .or-divider{display:none;}
+/* '아이디 저장'이 꺼져 있으면 보안접속만 오른쪽 정렬 */
+.auth-form .field-row:not(:has(input[type=checkbox])){justify-content:flex-end;}
+
+/* ---------- 회원가입 / 약관동의 등 단일 컬럼 폼 페이지 ---------- */
+.auth-single{max-width:760px;margin:0 auto;padding:56px 24px 130px;}
+.auth-single .path,.auth-single .ec-base-help{display:none;}
+.auth-single .titleArea{margin:0 0 30px;padding:0;text-align:left;border:none;}
+.auth-single .titleArea h2{font-size:24px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin:0;}
+.auth-single .titleArea--middle{margin:38px 0 12px;}
+.auth-single .titleArea--middle h2,.auth-single h3{font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--mauve);margin:0;}
+.auth-single .ec-base-table{width:100%;border-top:1px solid var(--line);margin:0 0 8px;}
+.auth-single .ec-base-table table{width:100%;border-collapse:collapse;}
+.auth-single .ec-base-table th,.auth-single .ec-base-table td{border:none;border-bottom:1px solid var(--line);padding:15px 8px;font-size:13px;color:var(--ink);text-align:left;vertical-align:middle;background:transparent;line-height:1.6;}
+.auth-single .ec-base-table th{width:150px;font-weight:500;color:var(--taupe);}
+.auth-single input[type=text],.auth-single input[type=password],.auth-single input[type=email],.auth-single input[type=tel],.auth-single input[type=number],.auth-single select,.auth-single textarea{border:none;border-bottom:1px solid var(--line);border-radius:0;background:transparent;font:inherit;font-size:13.5px;color:var(--ink);padding:8px 2px;outline:none;max-width:100%;}
+.auth-single input:focus,.auth-single select:focus,.auth-single textarea:focus{border-bottom-color:var(--mauve);}
+.auth-single input[type=checkbox],.auth-single input[type=radio]{accent-color:var(--ink);}
+.auth-single .btnNormal,.auth-single .btnSubmitFix,.auth-single .btnSubmit,.auth-single .btnEm,.auth-single .btnBasic,.auth-single .btnStrong{display:inline-block;padding:10px 18px;border-radius:2px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:12.5px;font-weight:600;letter-spacing:.02em;text-decoration:none;cursor:pointer;line-height:1.4;}
+.auth-single .btnSubmitFix,.auth-single .btnSubmit,.auth-single .btnEm,.auth-single .btnStrong{background:var(--ink);border-color:var(--ink);color:var(--ivory);}
+.auth-single .btnSubmitFix:hover,.auth-single .btnSubmit:hover,.auth-single .btnEm:hover,.auth-single .btnStrong:hover{background:var(--mauve-deep);border-color:var(--mauve-deep);}
+.auth-single .gFull,.auth-single .sizeL{width:100%;padding:15px 0;text-align:center;font-size:13.5px;}
+.auth-single .ec-base-button{margin-top:38px;text-align:center;}
+.auth-single .agreeArea{border:1px solid var(--line);background:var(--white);padding:18px 20px;margin:0 0 14px;border-radius:2px;}
+.auth-single .ec-base-chk{font-size:13px;color:var(--ink);}
+.auth-single .fr-view{max-height:220px;overflow-y:auto;font-size:12px;line-height:1.75;color:var(--taupe);}
+.auth-single .txtInfo,.auth-single .description,.auth-single .comment{font-size:12px;color:var(--taupe);}
+.auth-single .icoRequired{color:var(--rose);}
+/* 여기도 body#auth a{color:inherit} 를 이겨야 한다 */
+body#auth .auth-single .btnNormal,body#auth .auth-single .btnBasic{color:var(--ink);}
+body#auth .auth-single .btnSubmitFix,body#auth .auth-single .btnSubmit,body#auth .auth-single .btnEm,body#auth .auth-single .btnStrong{color:var(--ivory);}
+@media (max-width:640px){.auth-single{padding:40px 18px 100px;}.auth-single .ec-base-table th{width:auto;display:block;padding-bottom:0;border:none;}.auth-single .ec-base-table td{display:block;}}
+@media (max-width:800px){.auth-wrap{flex-direction:column;}.auth-media{min-height:280px;}.auth-panel{padding:48px 24px;}}
+</style>
+</head>
+<body id="auth">
+<!--@contents-->
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
+<script>
+(function(){
+  var kakaoConfig = {
+    appKey: 'YOUR_KAKAO_JAVASCRIPT_KEY',
+    redirectUri: (window.location.origin || 'https://your-domain.com') + '/kakao-callback.html'
+  };
+  var naverConfig = {
+    clientId: 'YOUR_NAVER_CLIENT_ID',
+    redirectUri: (window.location.origin || 'https://your-domain.com') + '/naver-callback.html',
+    state: 'oatmauve_naver_login'
+  };
+
+  function isKakaoConfigured(){
+    return !!(kakaoConfig.appKey && kakaoConfig.appKey !== 'YOUR_KAKAO_JAVASCRIPT_KEY');
+  }
+
+  function isNaverConfigured(){
+    return !!(naverConfig.clientId && naverConfig.clientId !== 'YOUR_NAVER_CLIENT_ID');
+  }
+
+  function openNaverLogin(){
+    if(!isNaverConfigured()){
+      alert('네이버 로그인 연동을 위해 네이버 Client ID를 설정해 주세요. auth.html의 naverConfig.clientId를 실제 값으로 변경하면 됩니다.');
+      return;
+    }
+
+    var params = new URLSearchParams({
+      response_type: 'code',
+      client_id: naverConfig.clientId,
+      redirect_uri: naverConfig.redirectUri,
+      state: naverConfig.state
+    });
+
+    window.location.href = 'https://nid.naver.com/oauth2.0/authorize?' + params.toString();
+  }
+
+  function bindSocialButtons(){
+    var kakaoBtn = document.querySelector('.btn-kakao');
+    var naverBtn = document.querySelector('.btn-naver');
+
+    if(kakaoBtn){
+      kakaoBtn.addEventListener('click', function(event){
+        event.preventDefault();
+
+        if(!isKakaoConfigured()){
+          alert('카카오 로그인 연동을 위해 카카오 앱 키를 설정해 주세요. auth.html의 kakaoConfig.appKey를 실제 값으로 변경하면 됩니다.');
+          return;
+        }
+
+        if(!window.Kakao){
+          alert('카카오 SDK를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+          return;
+        }
+
+        if(!window.Kakao.isInitialized()){
+          window.Kakao.init(kakaoConfig.appKey);
+        }
+
+        window.Kakao.Auth.authorize({
+          redirectUri: kakaoConfig.redirectUri,
+          throughTalk: false
+        });
+      });
+    }
+
+    if(naverBtn){
+      naverBtn.addEventListener('click', function(event){
+        event.preventDefault();
+        openNaverLogin();
+      });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindSocialButtons);
+  }else{
+    bindSocialButtons();
+  }
+})();
+</script>
+</body>
+</html>

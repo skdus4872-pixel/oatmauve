@@ -1,0 +1,252 @@
+<!--@layout(/layout/basic/layout.html)-->
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <div class="hero-media" aria-label="26SS Collection 상품 보러가기">
+      <div class="hero-slide active">
+        <a href="{$banner1_link}" aria-label="배너 1 링크">
+          <img src="{$banner1_img}" alt="{$banner1_alt}">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="{$banner2_link}" aria-label="배너 2 링크">
+          <img src="{$banner2_img}" alt="{$banner2_alt}">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="{$banner3_link}" aria-label="배너 3 링크">
+          <img src="{$banner3_img}" alt="{$banner3_alt}">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="{$banner4_link}" aria-label="배너 4 링크">
+          <img src="{$banner4_img}" alt="{$banner4_alt}">
+        </a>
+      </div>
+      <div class="hero-slide">
+        <a href="{$banner5_link}" aria-label="배너 5 링크">
+          <img src="{$banner5_img}" alt="{$banner5_alt}">
+        </a>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <span class="hero-index">01 / 05</span>
+    <button class="hero-arrow prev" type="button" aria-label="이전 배너">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="hero-arrow next" type="button" aria-label="다음 배너">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="hero-scroll-nav">
+      <button type="button" aria-label="맨 위로" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'});">
+        <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+      </button>
+      <button type="button" aria-label="아래로 스크롤" onclick="document.getElementById('new').scrollIntoView({behavior:'smooth'});">
+        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="admin-product-cta">
+    <div class="wrap">
+      <div class="admin-product-card">
+        <div>
+          <span class="eyebrow">Cafe24 Admin</span>
+          <h2>상품 등록과 진열을 바로 관리하세요.</h2>
+          <p>관리자 로그인 상태에서 아래 버튼으로 상품 등록 화면으로 이동할 수 있습니다.</p>
+        </div>
+        <div class="admin-product-actions">
+          <a class="btn btn-primary" href="/admin/shop/goods/goods_register.php">상품 등록</a>
+          <a class="btn btn-outline" href="/admin/shop/goods/goods_list.php">상품 목록</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEW ARRIVALS SLIDER ===== -->
+  <section class="product-section" id="new">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow best-title">New-5%</span>
+        </div>
+        <div class="section-head-right">
+          <a class="view-all" href="#none">전체보기</a>
+          <div class="slider-arrows">
+            <button class="slider-arrow prev" type="button" aria-label="이전 상품">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="slider-arrow next" type="button" aria-label="다음 상품">
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="product-slider-wrap">
+        <!-- ================================================================
+             [모듈 교체 지점 1] 신상품 슬라이더
+             product_listmain_1 = 관리자 > 상품 > 상품 진열 > 메인 진열 의 "추천상품"
+             (모듈코드 ↔ 분류 대응은 메인 진열 화면의 [메인분류 관리]에서 확인)
+
+             ★ 카페24 규칙 3가지 — 안 지키면 상품이 1개만 나오거나 깨집니다
+               1) 반복 단위는 <ul> 안의 <li> 이고, <li>에 id="anchorBoxId_{$product_no}" 가 있어야 함
+               2) <li>를 소스에 여러 벌 적어두어야 카페24가 반복 영역으로 인식함
+                  (실제 출력 개수는 아래 $count 값과 진열된 상품 수를 따름)
+               3) {$link_product_detail}은 URL 문자열이므로 <a href="...">로 써야 함
+                  ({$link_product_detail}...{$/link_product_detail} 형태는 그대로 글자로 찍힘)
+               ※ {$product_name}은 <span>으로 감싸져 출력되므로 alt=""에 넣으면 태그가 깨짐.
+                  이미지 대체텍스트는 {$seo_alt_tag}를 사용.
+             ================================================================ -->
+        <div module="product_listmain_1">
+          <!-- $count = 12
+               $cache = no -->
+          <ul class="product-grid stagger" id="newProductSlider">
+            <li id="anchorBoxId_{$product_no}" class="card">
+              <div class="badge">NEW</div>
+              <div class="wish-btn">♡</div>
+              <div class="ph">
+                <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+              </div>
+              <div class="card-info">
+                <p class="colorway">{$product_summary}</p>
+                <p class="pname">{$product_name}</p>
+                <div class="price-row"><span class="final">{$product_price}</span></div>
+              </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}" class="card">
+              <div class="badge">NEW</div>
+              <div class="wish-btn">♡</div>
+              <div class="ph">
+                <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+              </div>
+              <div class="card-info">
+                <p class="colorway">{$product_summary}</p>
+                <p class="pname">{$product_name}</p>
+                <div class="price-row"><span class="final">{$product_price}</span></div>
+              </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}" class="card">
+              <div class="badge">NEW</div>
+              <div class="wish-btn">♡</div>
+              <div class="ph">
+                <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+              </div>
+              <div class="card-info">
+                <p class="colorway">{$product_summary}</p>
+                <p class="pname">{$product_name}</p>
+                <div class="price-row"><span class="final">{$product_price}</span></div>
+              </div>
+            </li>
+            <li id="anchorBoxId_{$product_no}" class="card">
+              <div class="badge">NEW</div>
+              <div class="wish-btn">♡</div>
+              <div class="ph">
+                <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+              </div>
+              <div class="card-info">
+                <p class="colorway">{$product_summary}</p>
+                <p class="pname">{$product_name}</p>
+                <div class="price-row"><span class="final">{$product_price}</span></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WEEKLY BEST ===== -->
+  <section class="best-section" id="best">
+    <div class="wrap">
+      <div class="best-head">
+        <h2 class="best-title">Weekly Best Item</h2>
+        <a class="view-all" href="#none">전체보기</a>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" type="button" data-filter="all">All</button>
+        <button class="filter-tab" type="button" data-filter="top">Top</button>
+        <button class="filter-tab" type="button" data-filter="pants">Pants</button>
+        <button class="filter-tab" type="button" data-filter="skirts">Skirts</button>
+        <button class="filter-tab" type="button" data-filter="dress">Dress</button>
+        <button class="filter-tab" type="button" data-filter="shoes">Shoes</button>
+      </div>
+      <!-- ================================================================
+           [모듈 교체 지점 2] Weekly Best
+           product_listmain_2 = 메인 진열의 "신상품" 진열
+           구조 규칙은 위 [모듈 교체 지점 1]과 동일합니다.
+
+           필터탭(All/Top/Pants...)은 data-category 값으로 걸러냅니다.
+           모듈이 카테고리명을 그대로 주지 않으므로 둘 중 하나를 쓰세요.
+             (A) 상품 "요약설명"에 top/pants/skirts/dress/shoes 중 하나를 적고
+                 data-category="{$product_summary}" 로 연결 (지금 방식)
+             (B) 필터탭을 지우고 카테고리 링크로 대체 (가장 간단하고 안전)
+           ※ .rank의 {$count}는 이 모듈에서 값이 없어 빈 칸으로 나옵니다.
+             순위 숫자가 필요하면 JS로 채우거나 제거하세요.
+           ================================================================ -->
+      <div module="product_listmain_2">
+        <!-- $count = 12
+             $cache = no -->
+        <ul class="product-grid best-grid" id="bestGrid">
+          <li id="anchorBoxId_{$product_no}" class="card" data-category="{$product_summary}">
+            <div class="rank">{$count}</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph">
+              <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+            </div>
+            <div class="card-info">
+              <p class="pname">{$product_name}</p>
+              <div class="price-row"><span class="final">{$product_price}</span></div>
+            </div>
+          </li>
+          <li id="anchorBoxId_{$product_no}" class="card" data-category="{$product_summary}">
+            <div class="rank">{$count}</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph">
+              <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+            </div>
+            <div class="card-info">
+              <p class="pname">{$product_name}</p>
+              <div class="price-row"><span class="final">{$product_price}</span></div>
+            </div>
+          </li>
+          <li id="anchorBoxId_{$product_no}" class="card" data-category="{$product_summary}">
+            <div class="rank">{$count}</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph">
+              <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+            </div>
+            <div class="card-info">
+              <p class="pname">{$product_name}</p>
+              <div class="price-row"><span class="final">{$product_price}</span></div>
+            </div>
+          </li>
+          <li id="anchorBoxId_{$product_no}" class="card" data-category="{$product_summary}">
+            <div class="rank">{$count}</div>
+            <div class="wish-btn">♡</div>
+            <div class="ph">
+              <a href="{$link_product_detail}"><img src="{$image_medium}" alt="{$seo_alt_tag}"></a>
+            </div>
+            <div class="card-info">
+              <p class="pname">{$product_name}</p>
+              <div class="price-row"><span class="final">{$product_price}</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INSTAGRAM ===== -->
+  <section class="insta-section">
+    <span class="eyebrow insta-handle">@oat_mauve</span>
+    <div class="wrap">
+      <div class="insta-grid">
+        <a class="ph" href="#none"><span>IG 01</span></a>
+        <a class="ph" href="#none"><span>IG 02</span></a>
+        <a class="ph" href="#none"><span>IG 03</span></a>
+        <a class="ph" href="#none"><span>IG 04</span></a>
+        <a class="ph" href="#none"><span>IG 05</span></a>
+        <a class="ph" href="#none"><span>IG 06</span></a>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,90 @@
+<!--@layout(/layout/basic/auth.html)-->
+
+<div class="auth-topbar">
+  <a href="/index.html"><img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/logo.png" alt="OAT MAUVE"></a>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-media">
+    <img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/hero_01.jpg" alt="OAT MAUVE">
+  </div>
+
+  <div class="auth-panel">
+    <!-- ================================================================
+         카페24 로그인 모듈 (member_login)
+         - {$form.member_id} / {$form.member_passwd} 가 실제 input 을 출력합니다.
+           마크업을 직접 쓰면 로그인이 동작하지 않습니다.
+         - 로그인 실행은 <a onclick="{$action_func_login}"> 입니다.
+           (내부적으로 MemberAction.login(...) 호출 → /exec/front/Member/login/ 로 전송)
+         - 네이버/카카오 버튼의 {$display_naver|display} 는 쇼핑몰에 해당 SNS 로그인이
+           설정돼 있지 않으면 자동으로 .displaynone 클래스를 붙여 숨깁니다.
+         - 아래 @css / @js 두 줄은 로그인 모듈 동작에 필요합니다. 지우지 마세요.
+         ================================================================ -->
+    <div module="member_login" class="auth-form" id="{$member_login_module_id}">
+      <!--@css(/css/module/member/login.css)-->
+      <!--@js(/js/module/member/login.js)-->
+      <!--
+        $defaultReturnUrl = /index.html
+        $forbidIpUrl = member/adminFail.html
+      -->
+      <h1>Sign In</h1>
+
+      <div class="field">
+        <label class="id ePlaceholder" title="아이디 또는 이메일">{$form.member_id}</label>
+      </div>
+      <div class="field">
+        <label class="password ePlaceholder" title="비밀번호">{$form.member_passwd}</label>
+      </div>
+
+      <div class="field-row">
+        {$form.member_check_save_id}
+        <span class="secure-note">{$form.member_check_secret_connect}</span>
+      </div>
+
+      <a href="#none" class="btn-block btn-signin" onclick="{$action_func_login}">로그인</a>
+
+      <div class="or-divider">OR</div>
+
+      <a href="#none" class="btn-block btn-naver {$display_naver|display}" onclick="{$naver_func_login}"><span class="badge-mark">N</span> NAVER 로그인</a>
+      <a href="#none" class="btn-block btn-kakao {$display_kakao|display}" onclick="{$kakao_func_login}"><svg viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.86 5.18 4.66 6.58-.2.74-.73 2.68-.84 3.1-.13.52.19.51.4.37.16-.11 2.6-1.77 3.66-2.49.68.1 1.38.15 2.12.15 5.52 0 10-3.48 10-7.71C22 6.48 17.52 3 12 3z"/></svg>Kakao 로그인</a>
+
+      <div class="or-divider">OR</div>
+
+      <a href="/member/agreement.html" class="btn-block btn-outline-block">Create New Account</a>
+
+      <ul class="helper-links">
+        <li><a href="/member/id/find_id.html">아이디찾기</a></li>
+        <li class="sep">|</li>
+        <li><a href="/member/passwd/find_passwd_info.html">비밀번호찾기</a></li>
+        <li class="sep">|</li>
+        <li><a href="/myshop/order/list.html">주문조회</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<a href="/board/free/list.html" class="help-bubble">help?</a>
+
+<script>
+(function(){
+  function setPh(){
+    var f=document.querySelector(".auth-form");
+    if(!f) return;
+    var id=f.querySelector("input[name=member_id]");
+    var pw=f.querySelector("input[name=member_passwd]");
+    if(id) id.placeholder="아이디 또는 이메일";
+    if(pw) pw.placeholder="비밀번호";
+  }
+  // 이미 로그인한 방문자는 로그인 폼이 출력되지 않는다(카페24 member_login 모듈 동작).
+  // 그 상태에서 빈 화면을 보여주는 대신 메인으로 보낸다.
+  function alreadyLoggedIn(){
+    var panel=document.querySelector(".auth-panel");
+    if(!panel) return;                              // 레이아웃 자체가 안 그려졌으면 건드리지 않는다
+    if(panel.querySelector(".auth-form")) return;   // 로그인 폼이 있으면 비로그인 방문자
+    location.replace("/index.html");
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){alreadyLoggedIn();setPh();});}else{alreadyLoggedIn();setPh();}
+  setTimeout(setPh,300);
+  setTimeout(setPh,1200);
+})();
+</script>

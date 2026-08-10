@@ -1,0 +1,232 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAT MAUVE | 오트모브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!--@css(/layout/basic/css/otmove-main.css)-->
+</head>
+<body>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+      <span>FREE SHIPPING OVER ₩50,000</span>
+      <span>26SS SALE UP TO 30%</span>
+      <span>NEW ARRIVALS EVERY THU 5PM</span>
+      <span>OAT MAUVE MEMBERSHIP 5% OFF</span>
+    </div>
+  </div>
+
+  <!-- ===== TOP UTILITY BAR ===== -->
+  <div class="util-bar">
+    <div class="wrap">
+      <a href="/myshop/index.html">마이페이지</a>
+      <a href="/myshop/order/list.html">주문조회</a>
+      <a href="/admin/shop/goods/goods_register.php">상품등록</a>
+      <a href="#none">고객센터</a>
+      <a href="/member/login.html">로그인</a>
+      <a href="/member/agreement.html">회원가입</a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-wrap wrap" style="position:relative;">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand-row">
+        <a class="logo" href="/index.html"><img src="{$image_path}/logo.png" alt="OAT MAUVE"></a>
+      </div>
+      <div class="header-icons">
+        <a href="/myshop/index.html" aria-label="마이페이지">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </a>
+        <a href="/order/basket.html" aria-label="장바구니">
+          <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        </a>
+        <a href="/product/search.html" aria-label="검색">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <div class="wrap">
+        <ul>
+          <li><a href="/product/list.html?cate_no=00">NEW-5%</a></li>
+          <li><a href="/product/list.html?cate_no=00">26SS SALE</a></li>
+          <li>
+            <a href="/product/list.html?cate_no=25">TOPS</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=25">T-Shirts</a>
+              <a href="/product/list.html?cate_no=25">Shirts &amp; Blouses</a>
+              <a href="/product/list.html?cate_no=25">Sleeveless</a>
+              <a href="/product/list.html?cate_no=25">Cardigan</a>
+              <a href="/product/list.html?cate_no=25">Knitwear</a>
+            </div>
+          </li>
+          <li>
+            <a href="/product/list.html?cate_no=24">OUTWEAR</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=24">Coats</a>
+              <a href="/product/list.html?cate_no=24">Jackets</a>
+            </div>
+          </li>
+          <li>
+            <a href="/product/list.html?cate_no=27">BOTTOM</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=27">Skirts</a>
+              <a href="/product/list.html?cate_no=27">Pants</a>
+            </div>
+          </li>
+          <li>
+            <a href="/product/list.html?cate_no=26">DRESS</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=26">미니원피스</a>
+              <a href="/product/list.html?cate_no=26">미디원피스</a>
+              <a href="/product/list.html?cate_no=26">맥시원피스</a>
+            </div>
+          </li>
+          <li>
+            <a href="/product/list.html?cate_no=42">SHOES</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=42">플랫</a>
+              <a href="/product/list.html?cate_no=42">힐</a>
+              <a href="/product/list.html?cate_no=42">스니커즈</a>
+              <a href="/product/list.html?cate_no=42">샌들</a>
+            </div>
+          </li>
+          <li>
+            <a href="/product/list.html?cate_no=28">ACC</a>
+            <div class="sub-nav">
+              <a href="/product/list.html?cate_no=28">백</a>
+              <a href="/product/list.html?cate_no=28">주얼리</a>
+              <a href="/product/list.html?cate_no=28">벨트</a>
+              <a href="/product/list.html?cate_no=28">스카프</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== SIDE DRAWER MENU ===== -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <a class="drawer-logo" href="/index.html"><img src="{$image_path}/logo.png" alt="OAT MAUVE" style="height:24px;width:auto;"></a>
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="메뉴 닫기">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="/product/list.html?cate_no=00">NEW-5%</a></li>
+      <li><a href="/product/list.html?cate_no=00">26SS SALE</a></li>
+      <li>
+        <a href="/product/list.html?cate_no=25">TOPS</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=25">T-Shirts</a>
+          <a href="/product/list.html?cate_no=25">Shirts &amp; Blouses</a>
+          <a href="/product/list.html?cate_no=25">Sleeveless</a>
+          <a href="/product/list.html?cate_no=25">Cardigan</a>
+          <a href="/product/list.html?cate_no=25">Knitwear</a>
+        </div>
+      </li>
+      <li>
+        <a href="/product/list.html?cate_no=24">OUTWEAR</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=24">Coats</a>
+          <a href="/product/list.html?cate_no=24">Jackets</a>
+        </div>
+      </li>
+      <li>
+        <a href="/product/list.html?cate_no=27">BOTTOM</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=27">Skirts</a>
+          <a href="/product/list.html?cate_no=27">Pants</a>
+        </div>
+      </li>
+      <li>
+        <a href="/product/list.html?cate_no=26">DRESS</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=26">미니원피스</a>
+          <a href="/product/list.html?cate_no=26">미디원피스</a>
+          <a href="/product/list.html?cate_no=26">맥시원피스</a>
+        </div>
+      </li>
+      <li>
+        <a href="/product/list.html?cate_no=42">SHOES</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=42">플랫</a>
+          <a href="/product/list.html?cate_no=42">힐</a>
+          <a href="/product/list.html?cate_no=42">스니커즈</a>
+          <a href="/product/list.html?cate_no=42">샌들</a>
+        </div>
+      </li>
+      <li>
+        <a href="/product/list.html?cate_no=28">ACC</a>
+        <div class="drawer-sub">
+          <a href="/product/list.html?cate_no=28">백</a>
+          <a href="/product/list.html?cate_no=28">주얼리</a>
+          <a href="/product/list.html?cate_no=28">벨트</a>
+          <a href="/product/list.html?cate_no=28">스카프</a>
+        </div>
+      </li>
+    </ul>
+    <div class="drawer-utility">
+      <a href="/myshop/index.html">마이페이지</a>
+      <a href="/myshop/order/list.html">주문조회</a>
+      <a href="/admin/shop/goods/goods_register.php">상품등록</a>
+      <a href="#none">고객센터</a>
+      <a href="/member/login.html">로그인</a>
+      <a href="/member/agreement.html">회원가입</a>
+    </div>
+  </aside>
+
+  <!-- ===== 페이지 본문이 들어오는 자리 (메인/상품/게시판 등) ===== -->
+  <!--@contents-->
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Customer</h4>
+          <a href="#none">공지사항</a>
+          <a href="#none">교환/반품</a>
+          <a href="#none">이용약관</a>
+          <a href="#none">개인정보처리방침</a>
+          <a href="/naver-pay.html">네이버페이 결제안내</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#none">브랜드 스토리</a>
+          <a href="#none">멤버십</a>
+          <a href="#none">인스타그램</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="biz-info">
+          오트모브 (oatmauve) &nbsp;|&nbsp; 대표자 : 문해나 &nbsp;|&nbsp; 사업자등록번호 : 394-13-03009<br>
+          통신판매업신고 : 제 2026-인천연수구-1644 호 &nbsp;|&nbsp; 주소 : 인천광역시 연수구 컨벤시아대로 90, 501동 905호 (송도동, 인천힐스테이트) &nbsp;|&nbsp; 대표전화 : 010-4949-9712<br>
+          © OAT MAUVE. All rights reserved. &nbsp;|&nbsp; Hosting by Cafe24
+        </div>
+        <div class="sns-row">
+          <a href="https://www.instagram.com/oat_mauve/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+          <a href="#none" aria-label="Kakao">K</a>
+          <a href="#none" aria-label="Blog">B</a>
+          <a href="#none" aria-label="Youtube">Y</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<!--@js(/layout/basic/otmove-main.js)-->
+</body>
+</html>
