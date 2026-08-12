@@ -22,6 +22,8 @@
       var siteHeader = document.querySelector('header.site-header');
       var utilBarEl = document.querySelector('.util-bar');
       var ribbonEl = document.querySelector('.ribbon-divider');
+      var marqueeEl = document.querySelector('.marquee');
+      var overlapHeroEl = document.querySelector('.hero');
       function updateOverlap(){
         var headerMarginTop = parseFloat(getComputedStyle(siteHeader).marginTop) || 0;
         var h = siteHeader.offsetHeight
@@ -29,6 +31,17 @@
           + (utilBarEl ? utilBarEl.getBoundingClientRect().height : 0)
           + (ribbonEl ? ribbonEl.getBoundingClientRect().height : 0);
         document.documentElement.style.setProperty('--overlap-h', h + 'px');
+
+        // 위 합산값은 실제 렌더링과 몇 px 어긋날 수 있어(브라우저 레이아웃 엔진의
+        // sticky/fixed 형제 요소 처리 차이 등) 히어로 실제 위치를 마퀴 하단과 직접
+        // 비교해 오차를 보정한다 — 그래야 헤더/유틸바 글씨가 항상 히어로 이미지
+        // 위(어두운 오버레이 위)에 정확히 올라가고, 카페24 배경 위로 새어나오지 않는다.
+        if(overlapHeroEl && marqueeEl){
+          var diff = overlapHeroEl.getBoundingClientRect().top - marqueeEl.getBoundingClientRect().bottom;
+          if(Math.abs(diff) > 0.5){
+            document.documentElement.style.setProperty('--overlap-h', (h + diff) + 'px');
+          }
+        }
       }
       updateOverlap();
       window.addEventListener('resize', updateOverlap);
