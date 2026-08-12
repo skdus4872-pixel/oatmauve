@@ -24,7 +24,7 @@ editor (or a copied skin, never the live one) and checking the storefront previe
 | Local file | Cafe24 destination | Role |
 |---|---|---|
 | `layout.html` | `/layout/basic/main.html` | Main-page layout: marquee, util bar, header, drawer, footer |
-| `index.html` | `/main/index.html` | Main page body (hero, new arrivals, weekly best, instagram) |
+| `index.html` | `/main/index.html` | Main page body (hero, new arrivals, weekly best) |
 | `otmove-main.css` | `/layout/basic/css/otmove-main.css` | All styles |
 | `otmove-main.js` | `/layout/basic/otmove-main.js` | Drawer, header scroll state, hero slider, product slider, filter tabs |
 | `auth.html` | `/layout/basic/auth.html` | Layout for login/signup screens (CSS embedded inline) |

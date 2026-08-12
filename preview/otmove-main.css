@@ -613,25 +613,6 @@
     text-shadow:0 2px 10px rgba(90,53,64,.4);
   }
 
-  /* ---------- INSTAGRAM ---------- */
-  .insta-section{padding:80px 0;text-align:center;}
-  .insta-section .insta-handle{
-    display:block;
-    font-family:var(--font-body);
-    font-style:normal;
-    font-weight:300;
-    font-size:16px;
-    letter-spacing:.08em;
-    color:var(--mauve);
-    text-transform:none;
-    margin-bottom:40px;
-  }
-  .insta-grid{
-    display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
-  }
-  .insta-grid .ph{aspect-ratio:1/1;}
-  .insta-grid .ph:hover{opacity:.85;}
-
   /* ---------- NEWSLETTER ---------- */
   .newsletter{
     background:var(--mauve-deep);
@@ -720,7 +701,6 @@
     .cat-row{grid-template-columns:repeat(4,1fr);row-gap:26px;}
     .product-grid .card{flex:0 0 calc(33.333% - 15px);}
     .best-grid{grid-template-columns:repeat(3,1fr);}
-    .insta-grid{grid-template-columns:repeat(4,1fr);}
     .editorial-grid{grid-template-columns:1fr;}
     .footer-grid{gap:60px;}
   }
@@ -739,7 +719,6 @@
     .product-grid .card{flex:0 0 calc(50% - 7px);}
     .product-grid.stagger .card:nth-child(2n){margin-top:0;}
     .best-grid{grid-template-columns:repeat(2,1fr);}
-    .insta-grid{grid-template-columns:repeat(3,1fr);}
     .editorial-copy{padding:40px 24px;}
     .footer-grid{flex-direction:column;gap:60px;}
     .footer-bottom{align-items:center;text-align:center;}
