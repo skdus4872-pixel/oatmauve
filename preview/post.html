@@ -39,7 +39,7 @@
     border-bottom:1px solid var(--line);
   }
 
-  .post-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;}
+  .post-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:22px;}
   .post-actions button,.post-actions a{
     display:inline-block;padding:10px 20px;border-radius:2px;font-size:12.5px;font-weight:600;
     border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer;
@@ -78,6 +78,11 @@
   @media (max-width:640px){
     .board-main{padding:16px 20px 70px;}
     .board-breadcrumb{padding:12px 20px 0;}
+    .post-title{font-size:20px;}
+    .post-meta{gap:10px 16px;}
+    .post-actions{justify-content:stretch;}
+    .post-actions button,.post-actions a{flex:1 1 auto;text-align:center;}
+    .verify-box input[type=password]{min-width:0;}
   }
 </style>
 </head>

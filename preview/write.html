@@ -47,7 +47,7 @@
   }
   .form-error.show{display:block;}
 
-  .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:30px;}
+  .form-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:30px;}
   .form-actions a,.form-actions button{
     display:inline-block;padding:12px 26px;border-radius:2px;font-size:13px;font-weight:600;
     border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer;
@@ -59,7 +59,10 @@
   @media (max-width:640px){
     .board-main{padding:16px 20px 70px;}
     .board-breadcrumb{padding:12px 20px 0;}
+    .board-title{font-size:21px;}
     .form-two{grid-template-columns:1fr;}
+    .form-actions{justify-content:stretch;}
+    .form-actions a,.form-actions button{flex:1 1 auto;text-align:center;}
   }
 </style>
 </head>
