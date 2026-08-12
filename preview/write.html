@@ -39,7 +39,6 @@
   }
   .form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--mauve);outline:none;}
   .form-row textarea{min-height:220px;resize:vertical;line-height:1.7;}
-  .form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
   .form-error{
     display:none;margin-bottom:20px;padding:12px 14px;border-radius:2px;
@@ -60,7 +59,6 @@
     .board-main{padding:16px 20px 70px;}
     .board-breadcrumb{padding:12px 20px 0;}
     .board-title{font-size:21px;}
-    .form-two{grid-template-columns:1fr;}
     .form-actions{justify-content:stretch;}
     .form-actions a,.form-actions button{flex:1 1 auto;text-align:center;}
   }
@@ -158,15 +156,9 @@
         <input type="text" id="fTitle" name="title" maxlength="200" required>
       </div>
 
-      <div class="form-two">
-        <div class="form-row">
-          <label for="fNickname">작성자(닉네임)</label>
-          <input type="text" id="fNickname" name="nickname" maxlength="40" required>
-        </div>
-        <div class="form-row">
-          <label for="fPassword">비밀번호 (수정·삭제 시 필요, 4자 이상)</label>
-          <input type="password" id="fPassword" name="password" minlength="4" required>
-        </div>
+      <div class="form-row">
+        <label for="fNickname">작성자(닉네임)</label>
+        <input type="text" id="fNickname" name="nickname" maxlength="40" required>
       </div>
 
       <div class="form-row">
@@ -236,7 +228,6 @@
       category: document.getElementById('fCategory').value,
       title: document.getElementById('fTitle').value.trim(),
       nickname: document.getElementById('fNickname').value.trim(),
-      password: document.getElementById('fPassword').value,
       content: document.getElementById('fContent').value.trim()
     };
 
@@ -246,14 +237,6 @@
     }
     if(!payload.nickname){
       showError('작성자(닉네임)를 입력해 주세요.');
-      return;
-    }
-    if(!payload.password){
-      showError('비밀번호를 입력해 주세요.');
-      return;
-    }
-    if(payload.password.length < 4){
-      showError('비밀번호는 4자 이상 입력해 주세요.');
       return;
     }
     if(!payload.content){

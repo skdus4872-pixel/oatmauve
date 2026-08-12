@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   정적 미리보기 빌드. /api/posts/[id] (Vercel Serverless Function + Upstash Redis)를
-  호출해 글을 보여주고, 비밀번호(작성자 본인) 또는 관리자 비밀번호로 수정·삭제합니다.
+  호출해 글을 보여주고, 관리자 비밀번호로만 수정·삭제합니다.
   카페24 업로드 대상이 아니라 Vercel 미리보기 전용입니다.
 -->
 <html lang="ko">
@@ -232,7 +232,7 @@
       +   '<button type="button" class="btn-danger" id="deleteBtn">삭제</button>'
       + '</div>'
       + '<div class="verify-box" id="deleteVerify">'
-      +   '<input type="password" id="deletePw" placeholder="비밀번호 (본인 글 또는 관리자 비밀번호)">'
+      +   '<input type="password" id="deletePw" placeholder="관리자 비밀번호">'
       +   '<button type="button" id="deleteConfirm">삭제 확인</button>'
       +   '<button type="button" class="verify-cancel" id="deleteCancel">취소</button>'
       +   '<span class="verify-note" id="deleteNote">비밀번호가 일치하지 않습니다.</span>'
@@ -285,7 +285,7 @@
     box.className = 'verify-box';
     box.id = 'editVerify';
     box.innerHTML =
-      '<input type="password" id="editPw" placeholder="비밀번호 (본인 글 또는 관리자 비밀번호)">'
+      '<input type="password" id="editPw" placeholder="관리자 비밀번호">'
       + '<button type="button" id="editConfirm">확인</button>'
       + '<button type="button" class="verify-cancel" id="editCancel">취소</button>'
       + '<span class="verify-note" id="editNote">비밀번호가 일치하지 않습니다.</span>';

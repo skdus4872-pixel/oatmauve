@@ -1,5 +1,4 @@
 const { redis } = require('../../lib/redis');
-const { hashPassword, makeSalt } = require('../../lib/password');
 
 const ORDER_KEY = 'board:order';
 const CATEGORIES = ['공지사항', '상품 사용후기', '상품 Q&A', '이용안내 FAQ', '교환/반품 문의'];
@@ -24,16 +23,12 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { category, title, nickname, password, content } = req.body || {};
-    if (!title || !nickname || !password || !content) {
-      return res.status(400).json({ error: '제목, 작성자, 비밀번호, 내용을 모두 입력해 주세요.' });
-    }
-    if (String(password).length < 4) {
-      return res.status(400).json({ error: '비밀번호는 4자 이상이어야 합니다.' });
+    const { category, title, nickname, content } = req.body || {};
+    if (!title || !nickname || !content) {
+      return res.status(400).json({ error: '제목, 작성자, 내용을 모두 입력해 주세요.' });
     }
 
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-    const salt = makeSalt();
     const createdAt = Date.now();
     const post = {
       id,
@@ -43,15 +38,12 @@ module.exports = async (req, res) => {
       content: String(content).slice(0, 5000),
       createdAt,
       views: 0,
-      salt,
-      passwordHash: hashPassword(password, salt),
     };
 
     await redis.hset(`board:post:${id}`, post);
     await redis.zadd(ORDER_KEY, { score: createdAt, member: id });
 
-    const { salt: _s, passwordHash: _p, ...safePost } = post;
-    return res.status(201).json({ post: safePost });
+    return res.status(201).json({ post });
   }
 
   res.setHeader('Allow', 'GET, POST');
