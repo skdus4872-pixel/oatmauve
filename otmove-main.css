@@ -708,6 +708,7 @@
     .util-bar .wrap{padding:8px 20px;gap:14px;font-size:10.5px;}
     .header-icons{position:static;justify-content:center;padding:10px 0 0;}
     .brand-row{padding:20px 20px 6px;position:relative;}
+    .menu-toggle{left:7px;top:10px;width:44px;height:44px;}
     nav.main-nav ul{flex-wrap:wrap;justify-content:flex-start;overflow-x:auto;}
     .wrap{padding:0 20px;}
     .hero{min-height:100vh;text-align:center;}
