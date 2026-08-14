@@ -61,6 +61,9 @@ body#auth .btn-kakao{color:#391B1B;}
 body#auth .btn-outline-block{color:var(--ink);}
 body#auth .help-bubble{color:var(--ivory);}
 .auth-form .field-row:not(:has(input[type=checkbox])){justify-content:flex-end;}
+.login-error{margin:-8px 0 14px;font-size:12.5px;color:var(--mauve);min-height:18px;}
+.auth-form .field input.invalid{border-bottom-color:var(--rose);}
+.mock-note{border:1px dashed var(--line);background:var(--white);padding:13px 15px;border-radius:2px;font-size:12px;line-height:1.7;color:var(--taupe);margin:24px 0 0;}
 @media (max-width:800px){.auth-wrap{flex-direction:column;}.auth-media{min-height:280px;}.auth-panel{padding:48px 24px;}}
 </style>
 </head>
@@ -81,10 +84,10 @@ body#auth .help-bubble{color:var(--ivory);}
       <h1>Sign In</h1>
 
       <div class="field">
-        <input type="text" name="member_id" id="member_id" placeholder="아이디 또는 이메일">
+        <input type="text" name="member_id" id="member_id" placeholder="아이디 또는 이메일" autocomplete="username">
       </div>
       <div class="field">
-        <input type="password" name="member_passwd" id="member_passwd" placeholder="비밀번호">
+        <input type="password" name="member_passwd" id="member_passwd" placeholder="비밀번호" autocomplete="current-password">
       </div>
 
       <div class="field-row">
@@ -92,7 +95,9 @@ body#auth .help-bubble{color:var(--ivory);}
         <span class="secure-note">보안접속</span>
       </div>
 
-      <a href="#none" class="btn-block btn-signin">로그인</a>
+      <p class="login-error" id="loginError" role="alert"></p>
+
+      <a href="#none" class="btn-block btn-signin" id="btnSignin">로그인</a>
 
       <div class="or-divider">OR</div>
 
@@ -110,11 +115,56 @@ body#auth .help-bubble{color:var(--ivory);}
         <li class="sep">|</li>
         <li><a href="#none">주문조회</a></li>
       </ul>
+
+      <p class="mock-note">
+        미리보기용 목업입니다. 실제 인증을 하지 않으므로 아이디와 비밀번호를 형식만 맞춰
+        아무 값이나 넣으면 로그인됩니다. 입력값은 서버로 전송되지 않고 비밀번호는
+        어디에도 저장하지 않습니다.
+      </p>
     </div>
   </div>
 </div>
 
 <a href="#none" class="help-bubble">help?</a>
+
+<script>
+(function(){
+  var KEY   = 'otmove_login_id';
+  var id    = document.getElementById('member_id');
+  var pw    = document.getElementById('member_passwd');
+  var error = document.getElementById('loginError');
+
+  function fail(msg, field){
+    error.textContent = msg;
+    field.classList.add('invalid');
+    field.focus();
+  }
+
+  function submit(){
+    error.textContent = '';
+    id.classList.remove('invalid');
+    pw.classList.remove('invalid');
+
+    if(!id.value.trim())      return fail('아이디를 입력해 주세요.', id);
+    if(pw.value.length < 4)   return fail('비밀번호를 4자 이상 입력해 주세요.', pw);
+
+    // 목업이므로 비밀번호는 검사만 하고 버린다. 아이디만 세션에 남긴다.
+    try{ sessionStorage.setItem(KEY, id.value.trim()); }catch(e){}
+    location.href = 'mypage.html';
+  }
+
+  document.getElementById('btnSignin').addEventListener('click', function(e){
+    e.preventDefault();
+    submit();
+  });
+
+  [id, pw].forEach(function(field){
+    field.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); submit(); }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
