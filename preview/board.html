@@ -72,6 +72,12 @@
     display:inline-block;background:var(--ink);color:var(--ivory);
     padding:11px 26px;border-radius:2px;font-size:13px;font-weight:600;
   }
+  /* 비로그인 상태로 글쓰기를 눌렀을 때 뜨는 안내 */
+  .board-notice{
+    display:none;margin-bottom:16px;padding:12px 14px;border-radius:2px;
+    background:var(--blush);color:var(--mauve-deep);font-size:13px;
+  }
+  .board-notice.show{display:block;}
   .board-write:hover{background:var(--mauve-deep);}
 
   .board-move-row{
@@ -195,6 +201,8 @@
       <a href="#none" class="board-tab" data-category="교환/반품 문의">교환/반품 문의</a>
     </nav>
 
+    <div class="board-notice" id="boardNotice"></div>
+
     <div class="board-table-wrap">
       <table class="board-table">
         <thead>
@@ -232,7 +240,7 @@
         <input type="text" placeholder="검색어를 입력하세요">
         <button type="button">찾기</button>
       </div>
-      <a href="write.html" class="board-write">글쓰기</a>
+      <a href="write.html" class="board-write" id="boardWrite">글쓰기</a>
     </div>
 
     <div class="board-move-row">
@@ -294,6 +302,21 @@
   var body = document.getElementById('boardBody');
   var allPosts = [];
   var activeCategory = '상품 Q&A';
+
+  // 글쓰기는 로그인한 회원만. 비로그인 상태에서 누르면 안내 후 로그인 화면으로 보낸다.
+  var writeBtn = document.getElementById('boardWrite');
+  if(writeBtn){
+    writeBtn.addEventListener('click', function(e){
+      var id = null;
+      try{ id = sessionStorage.getItem('otmove_login_id'); }catch(err){}
+      if(id) return;
+      e.preventDefault();
+      var box = document.getElementById('boardNotice');
+      box.textContent = '문의글은 로그인 후 작성하실 수 있습니다. 로그인 화면으로 이동합니다.';
+      box.classList.add('show');
+      setTimeout(function(){ location.href = 'login.html'; }, 1200);
+    });
+  }
 
   function escapeHtml(str){
     return String(str == null ? '' : str).replace(/[&<>"']/g, function(c){

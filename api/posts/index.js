@@ -23,6 +23,12 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
+    // `nickname` 은 이제 자유 입력 닉네임이 아니라 작성자의 로그인 아이디를 담는다.
+    // 필드 이름은 이미 저장된 글들과의 호환을 위해 그대로 둔다.
+    //
+    // 주의: 프리뷰의 로그인은 sessionStorage 기반 목업이라 서버가 신원을 확인할 방법이
+    // 없다. 로그인 강제는 브라우저 쪽에서만 이뤄지며, 이 엔드포인트로 직접 요청을 보내면
+    // 아무 값이나 작성자로 넣을 수 있다. 실제 회원 인증은 카페24 게시판 모듈이 담당한다.
     const { category, title, nickname, content } = req.body || {};
     if (!title || !nickname || !content) {
       return res.status(400).json({ error: '제목, 작성자, 내용을 모두 입력해 주세요.' });
