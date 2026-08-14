@@ -1,0 +1,202 @@
+<!doctype html>
+<!--
+  정적 미리보기 빌드 — 회원가입 2단계(정보입력).
+  서버가 없는 목업이므로 어떤 값도 전송·저장하지 않습니다. 유효성 검사만 브라우저에서
+  돌고 통과하면 join_result.html 로 이동합니다.
+  실제 배포본은 카페24가 생성하는 /member/join.html 마크업을 그대로 두고 CSS만 얹습니다
+  (중복확인·본인인증·주소검색 JS가 그 마크업에 의존하므로 절대 다시 쓰지 마세요).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAT MAUVE | 회원가입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#FFF4E8;--blush:#F4D9DC;--rose:#E3AEB8;--mauve:#7A4B56;--mauve-deep:#5A3540;--ink:#2A2422;--taupe:#C9B8AE;--line:#E7D9D4;--white:#FFFFFF;--font-body:"Pretendard","Noto Sans KR",sans-serif;}
+body#auth{margin:0;padding:0;font-family:var(--font-body);color:var(--ink);background:var(--ivory);-webkit-font-smoothing:antialiased;min-height:100vh;}
+body#auth *{box-sizing:border-box;}
+body#auth a{color:inherit;text-decoration:none;}
+body#auth img{border:0;}
+.auth-topbar{padding:22px 32px;text-align:center;border-bottom:1px solid var(--line);}
+.auth-topbar img{height:34px;width:auto;}
+
+.auth-single{max-width:760px;margin:0 auto;padding:56px 24px 130px;}
+.auth-single .titleArea{margin:0 0 30px;padding:0;text-align:left;border:none;}
+.auth-single .titleArea h2{font-size:24px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin:0;}
+.auth-single h3{font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--mauve);margin:38px 0 12px;}
+.auth-single .ec-base-table{width:100%;border-top:1px solid var(--line);margin:0 0 8px;}
+.auth-single table{width:100%;border-collapse:collapse;}
+.auth-single th,.auth-single td{border:none;border-bottom:1px solid var(--line);padding:15px 8px;font-size:13px;color:var(--ink);text-align:left;vertical-align:middle;background:transparent;line-height:1.6;}
+.auth-single th{width:150px;font-weight:500;color:var(--taupe);}
+.auth-single input[type=text],.auth-single input[type=password],.auth-single input[type=email],.auth-single input[type=tel],.auth-single select{border:none;border-bottom:1px solid var(--line);border-radius:0;background:transparent;font:inherit;font-size:13.5px;color:var(--ink);padding:8px 2px;outline:none;max-width:100%;transition:border-color .2s ease;}
+.auth-single input:focus,.auth-single select:focus{border-bottom-color:var(--mauve);}
+.auth-single input::placeholder{color:var(--taupe);}
+.auth-single input.w-full{width:100%;}
+.auth-single .icoRequired{color:var(--rose);}
+.auth-single .txtInfo{font-size:12px;color:var(--taupe);margin:6px 0 0;}
+.auth-single .ec-base-button{margin-top:38px;text-align:center;}
+.auth-single .btnSubmitFix,.auth-single .btnNormal{display:inline-block;padding:10px 18px;border-radius:2px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:12.5px;font-weight:600;letter-spacing:.02em;text-decoration:none;cursor:pointer;line-height:1.4;font-family:inherit;}
+.auth-single .btnSubmitFix{background:var(--ink);border-color:var(--ink);color:var(--ivory);}
+.auth-single .btnSubmitFix:hover{background:var(--mauve-deep);border-color:var(--mauve-deep);}
+.auth-single .gFull{width:100%;padding:15px 0;text-align:center;font-size:13.5px;}
+body#auth .auth-single .btnNormal{color:var(--ink);}
+body#auth .auth-single .btnSubmitFix{color:var(--ivory);}
+
+.join-steps{display:flex;gap:0;list-style:none;margin:0 0 36px;padding:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--white);}
+.join-steps li{flex:1;text-align:center;padding:13px 6px;font-size:12px;letter-spacing:.04em;color:var(--taupe);border-left:1px solid var(--line);}
+.join-steps li:first-child{border-left:none;}
+.join-steps li.on{background:var(--ink);color:var(--ivory);font-weight:600;}
+.join-steps li .num{font-family:"Fraunces",serif;font-style:italic;margin-right:6px;}
+
+.inline-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.inline-row .btnNormal{flex:0 0 auto;padding:8px 14px;font-size:12px;}
+.err{display:block;margin:7px 0 0;font-size:12px;color:var(--mauve);min-height:16px;}
+input.invalid{border-bottom-color:var(--rose) !important;}
+.mock-note{border:1px dashed var(--line);background:var(--white);padding:14px 16px;border-radius:2px;font-size:12px;line-height:1.7;color:var(--taupe);margin:0 0 30px;}
+@media (max-width:640px){
+  .auth-single{padding:40px 18px 100px;}
+  .auth-single th{width:auto;display:block;padding-bottom:0;border:none;color:var(--ink);font-weight:600;}
+  .auth-single td{display:block;padding-top:6px;}
+  .join-steps li{font-size:11px;padding:11px 4px;}
+}
+</style>
+</head>
+<body id="auth">
+
+<div class="auth-topbar">
+  <a href="index.html"><img src="https://ecimg.cafe24img.com/pg3204b51964264006/oatmauve/logo.png" alt="OAT MAUVE"></a>
+</div>
+
+<div class="auth-single">
+  <div class="titleArea"><h2>회원가입</h2></div>
+
+  <ol class="join-steps">
+    <li><span class="num">01</span>약관동의</li>
+    <li class="on"><span class="num">02</span>정보입력</li>
+    <li><span class="num">03</span>가입완료</li>
+  </ol>
+
+  <p class="mock-note">
+    미리보기용 목업입니다. 입력한 값은 어디에도 전송·저장되지 않고, 브라우저에서 형식 검사만
+    거친 뒤 다음 화면으로 넘어갑니다. 실제 가입 처리는 카페24 회원가입 모듈이 담당합니다.
+  </p>
+
+  <form id="joinForm" novalidate>
+    <h3>기본정보</h3>
+    <div class="ec-base-table">
+      <table>
+        <tbody>
+          <tr>
+            <th>아이디 <span class="icoRequired">*</span></th>
+            <td>
+              <div class="inline-row">
+                <input type="text" id="memberId" class="w-full" style="flex:1 1 220px;" placeholder="영문 소문자/숫자 4~16자" autocomplete="username">
+                <button type="button" class="btnNormal" id="btnDupe">중복확인</button>
+              </div>
+              <span class="err" id="errId"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호 <span class="icoRequired">*</span></th>
+            <td>
+              <input type="password" id="passwd" class="w-full" placeholder="영문·숫자 조합 8자 이상" autocomplete="new-password">
+              <span class="err" id="errPw"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호 확인 <span class="icoRequired">*</span></th>
+            <td>
+              <input type="password" id="passwd2" class="w-full" placeholder="비밀번호를 다시 입력해 주세요" autocomplete="new-password">
+              <span class="err" id="errPw2"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>이름 <span class="icoRequired">*</span></th>
+            <td>
+              <input type="text" id="name" class="w-full" placeholder="이름" autocomplete="name">
+              <span class="err" id="errName"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>이메일 <span class="icoRequired">*</span></th>
+            <td>
+              <input type="email" id="email" class="w-full" placeholder="example@oatmauve.com" autocomplete="email">
+              <span class="err" id="errEmail"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>휴대전화 <span class="icoRequired">*</span></th>
+            <td>
+              <input type="tel" id="phone" class="w-full" placeholder="010-0000-0000" autocomplete="tel">
+              <span class="err" id="errPhone"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ec-base-button">
+      <button type="submit" class="btnSubmitFix gFull">가입하기</button>
+      <p style="margin:18px 0 0;"><a href="agreement.html" class="btnNormal">이전 단계</a></p>
+    </div>
+  </form>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('joinForm');
+
+  var fields = [
+    { el:'memberId', err:'errId',    test:function(v){ return /^[a-z0-9]{4,16}$/.test(v); },
+      msg:'영문 소문자와 숫자 조합 4~16자로 입력해 주세요.' },
+    { el:'passwd',   err:'errPw',    test:function(v){ return v.length >= 8 && /[a-zA-Z]/.test(v) && /[0-9]/.test(v); },
+      msg:'영문과 숫자를 함께 사용해 8자 이상 입력해 주세요.' },
+    { el:'passwd2',  err:'errPw2',   test:function(v){ return v.length > 0 && v === document.getElementById('passwd').value; },
+      msg:'비밀번호가 일치하지 않습니다.' },
+    { el:'name',     err:'errName',  test:function(v){ return v.trim().length >= 2; },
+      msg:'이름을 2자 이상 입력해 주세요.' },
+    { el:'email',    err:'errEmail', test:function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); },
+      msg:'이메일 형식을 확인해 주세요.' },
+    { el:'phone',    err:'errPhone', test:function(v){ return /^01[016789]-?\d{3,4}-?\d{4}$/.test(v.replace(/\s/g,'')); },
+      msg:'휴대전화 번호를 확인해 주세요. 예) 010-1234-5678' }
+  ];
+
+  function check(f){
+    var input = document.getElementById(f.el);
+    var slot  = document.getElementById(f.err);
+    var ok    = f.test(input.value);
+    slot.textContent = ok ? '' : f.msg;
+    input.classList.toggle('invalid', !ok);
+    return ok;
+  }
+
+  fields.forEach(function(f){
+    document.getElementById(f.el).addEventListener('blur', function(){ check(f); });
+  });
+
+  document.getElementById('btnDupe').addEventListener('click', function(){
+    var slot = document.getElementById('errId');
+    if(!check(fields[0])) return;
+    slot.style.color = 'var(--mauve)';
+    slot.textContent = '사용할 수 있는 아이디입니다. (목업이므로 실제 조회는 하지 않습니다)';
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var firstBad = null;
+    fields.forEach(function(f){
+      if(!check(f) && !firstBad) firstBad = document.getElementById(f.el);
+    });
+    if(firstBad){ firstBad.focus(); return; }
+    // 이름은 URL 쿼리스트링에 싣지 않는다 (주소창·리퍼러·로그에 남음). 세션에만 잠깐 둔다.
+    try{ sessionStorage.setItem('otmove_join_name', document.getElementById('name').value.trim()); }catch(e){}
+    location.href = 'join_result.html';
+  });
+})();
+</script>
+
+</body>
+</html>
